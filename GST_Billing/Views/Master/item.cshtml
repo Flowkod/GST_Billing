@@ -1,0 +1,246 @@
+﻿@model GST_Billing.Models.ItemManagement
+
+@{
+    ViewBag.Title = "item";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+@*<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/data-tables/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/data-tables/extensions/responsive/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/data-tables/css/dataTables.checkboxes.css">*@
+    
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-invoice.min.css">
+<link href="~/app-assets/css/pages/app-invoice.css" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-sidebar.css">
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-email.css">
+<style>
+    .select2-container {
+        z-index: 9999999;
+    }
+    #loading{
+        display:none;
+    }
+    [type=checkbox] + span:not(.lever):before, [type=checkbox]:not(.filled-in) + span:not(.lever):after {
+        border:solid 2px #ddd;
+    }
+</style>
+<!-- BEGIN: Page Main-->
+<!-- invoice list -->
+<section class="invoice-list-wrapper section">
+
+
+    <div class="responsive-table">
+        <div class="top display-flex  mb-2">
+            <div class="action-filters">
+                <div id="example_filter" class="dataTables_filter">
+                    <label>
+                        <input type="search" id="ItemNameSearch" class="" placeholder="Type Item Name" aria-controls="example">
+                        <div class="filter-btn">
+                            <!-- Dropdown Trigger -->
+                            <a class="compose-email-trigger btn waves-effect waves-light purple darken-1 border-round" href="#" data-target="btn-filter">
+                                <span class="hide-on-small-only">Filter Item</span>
+                                <i class="material-icons">filter_list</i>
+                            </a>
+                            <a class="btn-floating waves-effect waves-light gradient-45deg-purple-deep-orange" href="../Master/item" data-target="btn-filter">
+                                <i class="material-icons">refresh</i>
+                            </a>
+                        </div>
+                    </label>
+                </div>
+            </div><div class="actions action-btns display-flex align-items-center">
+                <div class="filter-action">
+
+                    @using (Html.BeginForm("ItemTableExcelExport", "Master", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(m => m.Item_Name)
+                        @Html.HiddenFor(m => m.Item_Type_Id)
+                        @Html.HiddenFor(m => m.Tax_id)
+                        @Html.HiddenFor(m => m.Item_Type_Id)
+                        @Html.HiddenFor(m => m.MRP)
+                        @Html.HiddenFor(m => m.To_MRP)
+                        @Html.HiddenFor(m => m.Discount)
+                        @Html.HiddenFor(m => m.To_Discount)
+                        @Html.HiddenFor(m => m.UOM_Unit)
+                        <button type="submit" class="btn waves-effect waves-light border-round z-depth-4">
+                            <i class="material-icons">file_download</i> <span>Export To Excel</span>
+                        </button>
+
+                    }
+
+                </div>
+                <div class="create-btn">
+                    <a href="../Master/ImportItems" class="btn waves-effect waves-light border-round z-depth-4">
+                        <i class="material-icons">file_upload</i>
+                        <span class="hide-on-small-only">Import</span>
+                    </a>
+                    <a href="../Master/Additem" class="btn waves-effect waves-light border-round z-depth-4">
+                        <i class="material-icons">add</i>
+                        <span class="hide-on-small-only">Add Item</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- create invoice button-->
+        <div id="dialog-data-table">
+            @Html.Action("ItemDataTable", "Master")
+        </div>
+        <br />
+    </div>
+    <div class="row" id="loading">
+        <div class="col s12">
+            <div id="circular-flashing" class="card card-tabs padding-10">
+                <div class="row">
+                    <div class="col s12 m12 center">
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-blue">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-red">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-yellow">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-green">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- Add new email popup Ends-->
+<!-- email compose sidebar -->
+<div class="email-compose-sidebar">
+    <div class="card quill-wrapper">
+        <div class="card-content pt-0">
+            <div class="card-header display-flex pb-2">
+                <h3 class="card-title">FILTER ITEM LIST</h3>
+                <div class="close close-icon">
+                    <i class="material-icons">close</i>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <!-- form start -->
+            <form id="FormFilter" class="edit-email-item mt-10 mb-10">
+                <div class="input-field">
+                    @Html.TextBoxFor(m => m.Item_Name,new { @id="ItemNameFilter"})
+                    <label>Item Name</label>
+                </div>
+                <div class="row">
+                    <div class="input-field col m6 s12">
+                        @Html.DropDownListFor(m => m.Item_Type_Id, new SelectList(
+                                  new List<Object>{
+                                    new { value = "2" , text = "Product"  },
+                                    new { value = "3" , text = "Services" }
+                                    },
+                                  "value",
+                                  "text"
+                                   ), "All", new { @class = "custom-select form-control" })
+                        <label>Item Type</label>
+                    </div>
+
+                    <div class="input-field col m6 s12">
+                        @Html.DropDownListFor(m => m.Tax_id, new SelectList(Model.Tax_List, "Value", "Text"), "Tax", new { @class = "select2 tax browser-default" })
+                    </div>
+
+                </div>
+                <div class="row input-field ">
+                    <div class="col m12 s12">
+                        <label class="left">MRP Price Between</label>
+                    </div>
+                    <div class="col m6 s12">
+                        @Html.TextBoxFor(m => m.MRP, new { @type = "number" })
+                    </div>
+                    <div class="col m6 s12">
+                        <div>
+                            @Html.TextBoxFor(m => m.To_MRP, new { @type = "number" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row input-field">
+                    <div class="col m12 s12">
+                        <label class="left">Discount Between</label>
+                    </div>
+                    <div class="col m6 s12">
+                        @Html.TextBoxFor(m => m.Discount, new { @type = "number" })
+                    </div>
+                    <div class="col m6 s12">
+                        <div>
+                            @Html.TextBoxFor(m => m.To_Discount, new { @type = "number" })
+                        </div>
+                    </div>
+                </div>
+                <div class="input-field">
+                    @Html.DropDownListFor(m => m.UOM_Unit, new SelectList(Model.Item_Units_List, "Value", "Text"), "Item Unit", new { @class = "select2 browser-default form-control" })
+                </div>
+
+                <div class="card-action pl-0 pr-0 right-align">
+                    <button type="reset" class="btn-small waves-effect waves-light cancel-email-item mr-1">
+                        <i class="material-icons left">close</i>
+                        <span>Cancel</span>
+                    </button>
+                    <button type="button" class="btn-small waves-effect waves-light cyan send-item" data-value="0" id="filter-item">
+                        <i class="material-icons left">filter_list</i>
+                        <span>Search</span>
+                    </button>
+                </div>
+                @Html.HiddenFor(m=>m.Page_No,new{@id="hid-page-no" })
+            </form>
+            <!-- form start end-->
+        </div>
+    </div>
+</div>
+
+@section footercontent
+{
+    <!-- END: Page Main-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    @*<script src="../../../app-assets/vendors/data-tables/js/jquery.dataTables.min.js"></script>
+        <script src="../../../app-assets/vendors/data-tables/extensions/responsive/js/dataTables.responsive.min.js"></script>
+        <script src="../../../app-assets/vendors/data-tables/js/datatables.checkboxes.min.js"></script>*@
+    <!-- END PAGE VENDOR JS-->
+
+   
+    <script src="../../../app-assets/js/scripts/form-select2.js"></script>
+    <script src="~/app-assets/js/GstBillCustom.js"></script>
+
+}

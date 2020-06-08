@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "ImportItems";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+        <!-- Search for small screen-->
+        <div class="container">
+            <div class="row">
+                <div class="col s10 m6 l6">
+                    <h5 class="breadcrumbs-title mt-0 mb-0"><span>Import Items </span></h5>
+                    <ol class="breadcrumbs mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="../Home/index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#">Master</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="../Master/item">Item</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Import Items
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="seaction">
+    <!--Basic Form-->
+    <!-- jQuery Plugin Initialization -->
+    <div class="row">
+        <!-- Form Advance -->
+        <div class="col s12 m12 l12">
+            <div id="Form-advance" class="card card card-default scrollspy">
+                <div class="card-content">
+                    <h4 class="card-title">
+                        Follow these steps:
+                    </h4>
+                    <ul>
+                        <li>
+                            1. Download the Excel template to your computer by clicking the Download button.
+                        </li>
+                        <li>
+                            2. Integrate your data into the template file, minding the column names.
+                        </li>
+                        <li>
+                            3. Click the Import button.
+                        </li>
+                    </ul>
+                    <h4 class="card-title">
+                        Important:
+                    </h4>
+                    <ul>
+                        <li>1. Your EXCEL data should be in the format below. The first line of your EXCEL file should be the column headers as in the table example. Also make sure that your file is UTF-8 to avoid unnecessary encoding problems.</li>
+                        <li>2. Column name should be exactly same as in given format</li>
+                        <li>3. To reduce complications only text field we have taken in import, remaining field you will update from edit item functionality.</li>
+                        <li>4. Only Item_Type,Item_Name,Item_Code is mandatory.</li>
+                        <li>5. Item_Type must be Product OR Service</li>
+                    </ul>
+                    <div class="table-responsive">
+                        <br />
+                        <h4 class="card-title">
+                            Sample Table
+                        </h4>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td class="red-text">Item_Type* </td>
+                                    <td class="red-text">Item_Name*</td>
+                                    <td>Item_Code*</td>
+                                    <td>Item_Short_Name</td>
+                                    <td>Item_Group</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Product</td>
+                                    <td>GST Billing Software</td>
+                                    <td>00001 </td>
+                                    <td>GST SOFT</td>
+                                    <td>SOFT</td>
+                                    <td>GST Billing software for all firms.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        <center>
+                            <a href="../Download/Import_Items_Format.xlsx" class="btn waves-effect waves-light gradient-45deg-purple-deep-orange border-round z-depth-4">
+                                <i class="material-icons left">file_download</i> <span>Download Sample File</span>
+                            </a>
+                        </center>
+                    </div>
+                    @using (Html.BeginForm("ImportItems", "Master", FormMethod.Post,new { enctype = "multipart/form-data" }))
+                    {
+                        <h4 class="card-title center-align mt-5">
+                            Upload Item FIle
+                        </h4>
+                        <div class="row">
+                            <div class="input-field col m3 s12"></div>
+                            <div class="col s12 m6 mb-3 center">
+                                <div class="file-field">
+                                    <div class="btn float-right">
+                                        <span>Select File</span>
+                                        <input type="file" name="importdata">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text">
+                                    </div>
+                                </div>
+                                    <button class="btn cyan waves-effect waves-light mt-5" type="submit" name="action">
+                                        Submit
+                                        <i class="material-icons right">send</i>
+                                    </button>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

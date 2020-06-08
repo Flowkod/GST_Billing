@@ -1,0 +1,158 @@
+﻿
+@{
+    ViewBag.Title = "Client";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+<div class="row">
+    <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+        <!-- Search for small screen-->
+        <div class="container">
+            <div class="row">
+                <div class="col s10 m6 l6">
+                    <h5 class="breadcrumbs-title mt-0 mb-0"><span>Import Client </span></h5>
+                    <ol class="breadcrumbs mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="../Home/index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#">Master</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="../Master/client">Client</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Import Client
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="seaction">
+    <!--Basic Form-->
+    <!-- jQuery Plugin Initialization -->
+    <div class="row">
+        <!-- Form Advance -->
+        <div class="col s12 m12 l12">
+            <div id="Form-advance" class="card card card-default scrollspy">
+                <div class="card-content">
+                    <h4 class="card-title">
+                        Follow these steps:
+                    </h4>
+                    <ul>
+                        <li>
+                            1. Download the Excel template to your computer by clicking the Download button.
+                        </li>
+                        <li>
+                            2. Integrate your data into the template file, minding the column names.
+                        </li>
+                        <li>
+                            3. Click the Import button.
+                        </li>
+                    </ul>
+                    <h4 class="card-title">
+                        Important:
+                    </h4>
+                    <ul>
+                        <li>1. Your EXCEL data should be in the format below. The first line of your EXCEL file should be the column headers as in the table example. Also make sure that your file is UTF-8 to avoid unnecessary encoding problems.</li>
+                        <li>2. Column name should be exactly same as in given format</li>
+                        <li>3. Opening_Balance should be in numeric format and Opening_type should be Credit or Debit.</li>
+
+                    </ul>
+                    <div class="table-responsive">
+                        <br />
+                        <h4 class="card-title">
+                            Sample Table
+                        </h4>
+                        <div style="overflow:auto;">
+                            <table class="table table-bordered table-striped" style="width:1500px;">
+                                <thead>
+                                    <tr>
+                                        <td class="red-text">Code*</td>
+                                        <td class="red-text">Company_Name*</td>
+                                        <td>Contact_Person_Name</td>
+                                        <td>Mobile_No</td>
+                                        <td>Phone_No</td>
+                                        <td>Email</td>
+                                        <td>Address</td>
+                                        <td>Country</td>
+                                        <td>State</td>
+                                        <td>City</td>
+                                        <td>Pin_Code</td>
+                                        <td>Website</td>
+                                        <td>GSTIN</td>
+                                        <td>PAN</td>
+                                        <td>LST</td>
+                                        <td>TPT</td>
+                                        <td>VAT</td>
+                                        <td>Opening_Balance</td>
+                                        <td>Opening_Type</td>
+                                        <td>Note</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <center>
+                            <a href="../Download/Import_Client_Format.xlsx" class="btn waves-effect waves-light gradient-45deg-purple-deep-orange border-round z-depth-4">
+                                <i class="material-icons left">file_download</i> <span>Download Sample File</span>
+                            </a>
+                        </center>
+                    </div>
+                    @using (Html.BeginForm("ImportClient", "Master", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <h4 class="card-title center-align mt-5">
+                            Upload Client FIle
+                        </h4>
+                        <div class="row">
+                            <div class="input-field col m3 s12"></div>
+                            <div class="col s12 m6 mb-3 center">
+                                <div class="file-field">
+                                    <div class="btn float-right">
+                                        <span>Select File</span>
+                                        <input type="file" name="importdata">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text">
+                                    </div>
+                                </div>
+                                <button class="btn cyan waves-effect waves-light mt-5" type="submit" name="action">
+                                    Submit
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

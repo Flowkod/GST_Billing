@@ -1,0 +1,206 @@
+﻿@model GST_Billing.Models.CompanyDetailsManagement
+@{
+    ViewBag.Title = "CompanyProfile";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+<link rel="stylesheet" type="text/css" href="../app-assets/css/pages/user-profile-page.css">
+<link rel="stylesheet" type="text/css" href="../app-assets/vendors/dropify/css/dropify.min.css">
+
+<style>
+    #user-profile input {
+        border-bottom: 1px dashed #9e9e9e;
+    }
+
+    .striped tr td {
+        padding: 15px;
+    }
+
+    .favicon {
+        width: 90px;
+        height: 90px;
+        border-radius: 100%;
+        border: solid;
+        margin: auto;
+        padding: 10px;
+        display: grid;
+        box-shadow: 0 24px 38px 3px rgba(0,0,0,.14), 0 9px 46px 8px rgba(0,0,0,.12), 0 11px 15px -7px rgba(0,0,0,.2);
+        background-color: white !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: 100% !important;
+    }
+</style>
+
+<div class="row">
+    <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+        <!-- Search for small screen-->
+        <div class="container">
+            <div class="row">
+                <div class="col s10 m6 l6">
+                    <h5 class="breadcrumbs-title mt-0 mb-0"><span>Company Profile</span></h5>
+                    <ol class="breadcrumbs mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="../Home/index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#">Account</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Company Profile
+                        </li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm("CompanyProfile", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="container">
+            <div class="section">
+                <div class="row user-profile mt-1 ml-0 mr-0">
+                    @if (Model.Company_Logo != null)
+                    {
+                        <input type="file" id="input-file-events" class="dropify-event" name="logo"
+                               data-default-file="@Model.Company_Logo" />
+                    }
+                    else
+                    {
+                        <input type="file" id="input-file-events" class="dropify-event" name="logo"
+                               data-default-file="../app-assets/images/logo/materialize-logo-big.png" />
+                    }
+                </div>
+                <div class="section" id="user-profile">
+                    <div class="row">
+                        <!-- User Profile Feed -->
+                        <div class="col s12 m4 l3 user-section-negative-margin" style="position:relative; z-index:2;">
+                            <div class="row">
+                                <div class="col s12 center-align">
+
+                                    @if (Model.Favicon != null)
+                                    {
+                                        <div class="favicon" style="background: url('@Model.Favicon');"></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="favicon" style="background: url('../../../app-assets/images/logo/materialize-logo-color.png');"></div>
+                                    }
+
+                                    <br />
+                                    <div class="file-field input-field m-0">
+                                        <div class="btn float-none">
+                                            <span>Change</span>
+                                            <input type="file" name="favicon">
+                                        </div>
+                                        <div class="file-path-wrapper position-absolute" style="visibility:hidden;">
+                                            <input class="file-path validate" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- users view card details start -->
+                        <!-- users view card details ends -->
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="row">
+                                <div class="col s12 mt-1">
+                                    <table class="striped">
+                                        <tbody>
+                                            <tr>
+                                                <td width="25%">Company Name:</td>
+                                                <td class="users-view-username">
+                                                    @Html.TextBoxFor(m => m.Company_Name, new { @placeholder = "Your Company Name" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Contact Person:</td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m.Conatact_Person, new { @placeholder = "Contact Person Name" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>E-mail:</td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m.Email, new { @placeholder = "Your Company Email" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mobile:</td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m.Mobile_No, new { @placeholder = "Your Company Mobile No" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>GSTIN:</td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m.GSTIN, new { @placeholder = "Company GST No" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Website:</td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m.Website, new { @placeholder = "Company Website url" })
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                    <h6 class="mb-2 mt-2"><i class="material-icons left" style="margin-top: -5px;">location_on</i> Address</h6>
+                                    <table class="striped">
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="1">Address:</td>
+                                                <td colspan="5">
+                                                    @Html.TextBoxFor(m => m.Address, new { @placeholder = "Building no/ street/ near by", @maxlength = "150" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>State:</td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m.State, new { @placeholder = "State" })
+                                                </td>
+
+                                                <td>City:</td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m.City, new { @placeholder = "City" })
+                                                </td>
+                                                <td>Pin Code:</td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m.Pin_Code, new { @placeholder = "Pin Code" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="1">Shipping Address:</td>
+                                                <td colspan="5">
+                                                    @Html.TextBoxFor(m => m.Shipping_Address, new { @placeholder = "Company Shipping Details Addresss", @maxlength = "200" })
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col s12 mt-3">
+                                    @Html.HiddenFor(m => m.Company_Id)
+                                  
+                                    <button type="submit" class="btn indigo waves-effect waves-light right">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section footercontent
+{
+    <script src="../app-assets/vendors/dropify/js/dropify.min.js"></script>
+    <script src="../app-assets/js/scripts/form-file-uploads.js"></script>
+}

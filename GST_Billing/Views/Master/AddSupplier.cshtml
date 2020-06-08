@@ -1,0 +1,282 @@
+﻿@model GST_Billing.Models.SupplierManagement
+
+@{
+    ViewBag.Title = "Supplier";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+<div class="row">
+    <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+        <!-- Search for small screen-->
+        <div class="container">
+            <div class="row">
+                <div class="col s10 m6 l6">
+                    <h5 class="breadcrumbs-title mt-0 mb-0"><span>Add/Update Supplier </span></h5>
+                    <ol class="breadcrumbs mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="../Home/index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#">Master</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="../Master/Supplier">Supplier</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Add/Update Supplier
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="seaction">
+    <!--Basic Form-->
+    <!-- jQuery Plugin Initialization -->
+    @using (Html.BeginForm("AddSupplier", "Master", FormMethod.Post))
+    {
+        <div class="row">
+            <!-- Form Advance -->
+            <div class="col s12 m12 l12">
+                <div id="Form-advance" class="card card card-default scrollspy">
+                    <div class="card-content">
+                        <h4 class="card-title">Supplier Details</h4>
+                        <div class="row">
+                            <div class="input-field col m6 s12">
+                                @Html.TextBoxFor(m => m.Company_Name)
+                                <label>Company Name*</label>
+                                <div class="error">
+                                    @Html.ValidationMessageFor(m => m.Company_Name, "")
+                                </div>
+                            </div>
+                            <div class="input-field col m6 s12">
+                                @Html.TextBoxFor(m => m.Code)
+                                <label for="first_name01">Supplier Code*</label>
+                                <div class="error">
+                                    @Html.ValidationMessageFor(m => m.Code, "")
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                @Html.TextBoxFor(m => m.Contact_Person_Name)
+                                <label>Contact Person Name</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col m4 s12">
+                                @Html.TextBoxFor(m => m.Mobile_No)
+                                <label for="first_name01">Mobile No</label>
+                                <div class="error">
+                                    @Html.ValidationMessageFor(m => m.Mobile_No, "")
+                                </div>
+                            </div>
+                            <div class="input-field col m4 s12">
+                                @Html.TextBoxFor(m => m.Phone_No)
+                                <label for="Description">Phone No</label>
+                            </div>
+
+                            <div class="input-field col m4 s12">
+                                @Html.TextBoxFor(m => m.Email)
+                                <label for="Description">Email</label>
+                                <div class="error">
+                                    @Html.ValidationMessageFor(m => m.Email, "")
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                @Html.TextBoxFor(m => m.Address, new { @placeholder = "Building no/ street/ near by", @maxlength = "100" })
+                                <label>Address</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.Country, new { @Value = "India" })
+                                <label for="first_name01">Country</label>
+                            </div>
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.State)
+                                <label for="Description">State</label>
+                            </div>
+
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.City)
+                                <label for="Description">City</label>
+                            </div>
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.Pin_Code)
+                                <label for="Description">Pin Code</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="input-field col m6 s12">
+                                @Html.TextBoxFor(m => m.Website, new { @placeholder = "www.domainname.com" })
+                                <label>Website</label>
+                            </div>
+                            <div class="input-field col m6 s12">
+                                @Html.TextBoxFor(m => m.GSTIN)
+                                <label>GSTIN</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.PAN)
+                                <label for="first_name01">PAN</label>
+                            </div>
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.LST)
+                                <label for="Description">LST</label>
+                            </div>
+
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.TPT)
+                                <label for="Description">TPT</label>
+                            </div>
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.VAT)
+                                <label for="Description">VAT</label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Form Advance -->
+            <div class="col s12 m12 l12">
+                <div id="Form-advance" class="card card card-default scrollspy">
+                    <div class="card-content">
+                        <h4 class="card-title">Account Details</h4>
+                        <div class="row">
+                            <div class="col m4 s12">
+                                <label class="ml-3">
+                                    @Html.RadioButtonFor(m => m.Opening_Type, "Credit", new { @checked = "checked" })
+                                    <span>Credit</span>
+                                </label>
+                                <label class="ml-3">
+                                    @Html.RadioButtonFor(m => m.Opening_Type, "Debit")
+                                    <span>Debit</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row pt-2 pl-1">
+                            <div class="input-field col m4 s12">
+                                @Html.TextBoxFor(m => m.Opening_Balance, new { @type = "number" })
+                                <label>Opening Balance</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Form Advance -->
+            <div class="col s12 m12 l12">
+                <div id="Form-advance" class="card card card-default scrollspy">
+                    <div class="card-content">
+                        <h4 class="card-title">Bank Details</h4>
+                        <div id="AddNewBank">
+                            @if (Model.dt.Rows.Count > 0)
+                            {
+                                for (int i = 0; i < Model.dt.Rows.Count; i++)
+                                {
+                                    <div class="row">
+                                        <div class="input-field col m3 s12">
+                                            @Html.TextBoxFor(m => m.Bank_Name, new { @Value = Model.dt.Rows[i]["Bank_Name"] })
+                                            @Html.HiddenFor(m => m.SupplierBankDetailsId, new { @Value = Model.dt.Rows[i]["Id"] })
+                                            <label>Bank Name</label>
+                                        </div>
+                                        <div class="input-field col m3 s12">
+                                            @Html.TextBoxFor(m => m.Bank_Branch, new { @Value = Model.dt.Rows[i]["Bank_Branch"] })
+                                            <label for="first_name01">Bank Branch</label>
+                                        </div>
+                                        <div class="input-field col m3 s12">
+                                            @Html.TextBoxFor(m => m.Bank_Acc_No, new { @Value = Model.dt.Rows[i]["Bank_Acc_No"] })
+                                            <label>Bank Account No</label>
+                                        </div>
+                                        <div class="input-field col m2 s12">
+                                            @Html.TextBoxFor(m => m.Bank_IFSC, new { @Value = Model.dt.Rows[i]["Bank_IFSC"] })
+                                            <label for="first_name01">IFSC Code</label>
+                                        </div>
+                                        <div class="col m1 s12">
+                                            <button type="button" id="RemoveBankbtn" style="width:30px; height:30px; line-height:0; margin-top:20px;" class="btn-floating waves-effect waves-light amber darken-4">
+                                                <i style="line-height:10px; font-size:14px;" class="material-icons">clear</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="input-field col m3 s12">
+                                        @Html.TextBoxFor(m => m.Bank_Name)
+                                        @Html.HiddenFor(m => m.SupplierBankDetailsId)
+                                        <label>Bank Name</label>
+                                    </div>
+                                    <div class="input-field col m3 s12">
+                                        @Html.TextBoxFor(m => m.Bank_Branch)
+                                        <label for="first_name01">Bank Branch</label>
+                                    </div>
+                                    <div class="input-field col m3 s12">
+                                        @Html.TextBoxFor(m => m.Bank_Acc_No)
+                                        <label>Bank Account No</label>
+                                    </div>
+                                    <div class="input-field col m2 s12">
+                                        @Html.TextBoxFor(m => m.Bank_IFSC)
+                                        <label for="first_name01">IFSC Code</label>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="row">
+                            <div class="col m2 right">
+                                <button type="button" id="AddNewBankbtn" class="btn mb-1 waves-effect waves-light mr-1">Add Bank</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                @Html.HiddenFor(m => m.Id)
+
+                                @if (Request.QueryString["Addedfrom"] != null)
+                                {
+                                    <input type="hidden" name="Addedfrom" value="@Request.QueryString["Addedfrom"]" />
+                                }
+
+                                <button class="btn cyan waves-effect waves-light left" type="submit" name="action">
+                                    Submit
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@using System.Web.Optimization
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+@section footercontent
+{
+    <script src="~/app-assets/js/GstBillCustom.js"></script>
+    <script>
+    jQuery(document).ready(function ($) {
+        var value = '@TempData["AddedFrom"]';
+        if (value != "") {
+            
+            parent.closew();
+        }
+    });
+    </script>
+}

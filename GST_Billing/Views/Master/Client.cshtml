@@ -1,0 +1,224 @@
+﻿@model GST_Billing.Models.ClientManagement
+@{
+    ViewBag.Title = "Client";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-invoice.min.css">
+<link href="~/app-assets/css/pages/app-invoice.css" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-sidebar.css">
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-email.css">
+
+<style>
+    .select2-container {
+        z-index: 9999999;
+    }
+
+    #loading {
+        display: none;
+    }
+
+    [type=checkbox] + span:not(.lever):before, [type=checkbox]:not(.filled-in) + span:not(.lever):after {
+        border: solid 2px #ddd;
+    }
+</style>
+<!-- BEGIN: Page Main-->
+<!-- invoice list -->
+<section class="invoice-list-wrapper section mb-10">
+
+
+    <div class="responsive-table">
+        <div class="top display-flex  mb-2">
+            <div class="action-filters">
+                <div id="example_filter" class="dataTables_filter">
+                    <label>
+                        <input type="search" id="ClientCompNameSearch" class="" placeholder="Type Company Name" aria-controls="example">
+                        <div class="filter-btn">
+                            <!-- Dropdown Trigger -->
+                            <a class="compose-email-trigger btn waves-effect waves-light purple darken-1 border-round" href="#" data-target="btn-filter">
+                                <span class="hide-on-small-only">Filter Client</span>
+                                <i class="material-icons">filter_list</i>
+                            </a>
+                            <a class="btn-floating waves-effect waves-light gradient-45deg-purple-deep-orange" href="../Master/Client" data-target="btn-filter">
+                                <i class="material-icons">refresh</i>
+                            </a>
+                        </div>
+                    </label>
+                </div>
+            </div><div class="actions action-btns display-flex align-items-center">
+                <div class="filter-action">
+
+                    @using (Html.BeginForm("ClientTableExcelExport", "Master", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(m => m.Company_Name)
+                        @Html.HiddenFor(m => m.Contact_Person_Name)
+                        @Html.HiddenFor(m => m.GSTIN)
+                        @Html.HiddenFor(m => m.Code)
+                        @Html.HiddenFor(m => m.Email)
+                        @Html.HiddenFor(m => m.Mobile_No)
+                        @Html.HiddenFor(m => m.Phone_No)
+                        @Html.HiddenFor(m => m.City)
+                        @Html.HiddenFor(m => m.State)
+                        <button type="submit" class="btn waves-effect waves-light border-round z-depth-4">
+                            <i class="material-icons">file_download</i> <span>Export To Excel</span>
+                        </button>
+                    }
+
+                </div>
+                <div class="create-btn">
+                    <a href="../Master/ImportClient" class="btn waves-effect waves-light border-round z-depth-4">
+                        <i class="material-icons">file_upload</i>
+                        <span class="hide-on-small-only">Import</span>
+                    </a>
+                    <a href="../Master/AddClient" class="btn waves-effect waves-light border-round z-depth-4">
+                        <i class="material-icons">add</i>
+                        <span class="hide-on-small-only">Add Client</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- create invoice button-->
+        <div id="dialog-data-table">
+            @Html.Action("ClientDataTable", "Master")
+        </div>
+        <br />
+    </div>
+    <div class="row" id="loading">
+        <div class="col s12">
+            <div id="circular-flashing" class="card card-tabs padding-10">
+                <div class="row">
+                    <div class="col s12 m12 center">
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-blue">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-red">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-yellow">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-green">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- Add new email popup Ends-->
+<!-- email compose sidebar -->
+<div class="email-compose-sidebar">
+    <div class="card quill-wrapper">
+        <div class="card-content pt-0">
+            <div class="card-header display-flex pb-2">
+                <h3 class="card-title">FILTER CLIENT LIST</h3>
+                <div class="close close-icon">
+                    <i class="material-icons">close</i>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <!-- form start -->
+            <form id="FormFilter" class="edit-email-item mt-10 mb-10">
+                <div class="input-field">
+                    @Html.TextBoxFor(m => m.Company_Name, new { @id = "ClientCompanyNameFilter" })
+                    <label>Company Name</label>
+                </div>
+                <div class="input-field">
+                    @Html.TextBoxFor(m => m.Contact_Person_Name)
+                    <label>Contact Person Name</label>
+                </div>
+                <div class="input-field">
+                    @Html.TextBoxFor(m => m.Code)
+                    <label>Client Code</label>
+                </div>
+                <div class="input-field">
+                    @Html.TextBoxFor(m => m.GSTIN)
+                    <label>GSTIN</label>
+                </div>
+                <div class="row input-field ">
+                    <div class="col m6 s12">
+                        <label>Email</label>
+                        @Html.TextBoxFor(m => m.Email)
+                    </div>
+                    <div class="col m6 s12">
+                        <div>
+                            <label>Mobile No</label>
+                            @Html.TextBoxFor(m => m.Mobile_No)
+                        </div>
+                    </div>
+                </div>
+                <div class="row input-field ">
+                    <div class="col m6 s12">
+                        <label>City</label>
+                        @Html.TextBoxFor(m => m.City)
+                    </div>
+                    <div class="col m6 s12">
+                        <div>
+                            <label>State</label>
+                            @Html.TextBoxFor(m => m.State)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-action pl-0 pr-0 right-align">
+                    <button type="reset" class="btn-small waves-effect waves-light cancel-email-item mr-1">
+                        <i class="material-icons left">close</i>
+                        <span>Cancel</span>
+                    </button>
+                    <button type="button" class="btn-small waves-effect waves-light cyan send-item" data-value="0" id="filter-Client">
+                        <i class="material-icons left">filter_list</i>
+                        <span>Search</span>
+                    </button>
+                </div>
+                @Html.HiddenFor(m => m.Page_No, new { @id = "hid-page-no" })
+            </form>
+            <!-- form start end-->
+        </div>
+    </div>
+</div>
+
+@section footercontent
+{
+    <script src="../../../app-assets/js/scripts/form-select2.js"></script>
+    <script src="~/app-assets/js/GstBillCustom.js"></script>
+
+}

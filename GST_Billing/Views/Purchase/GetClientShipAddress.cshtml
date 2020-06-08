@@ -1,0 +1,63 @@
+﻿@model GST_Billing.Models.ClientManagement
+
+<div class="row">
+    <div class="col s12 m12 l12">
+        <h6 class="card-title">Choose Shipping Address</h6>
+    </div>
+
+    @for (int i = 0; i < Model.dt.Rows.Count; i++)
+    {
+        <div class="col m4">
+            <div class="input-field">
+                <p class="mb-1">
+                    <label>
+                        @{
+                            string address = @Model.dt.Rows[0]["Address"] + " GSTIN:" + @Model.dt.Rows[0]["GSTIN"] + " Tel:" + @Model.dt.Rows[0]["Mobile_No"];
+                        }
+
+                        <input name="ClientShipAddress" id="popup_rdoClientShippingAddress" type="radio" value="@address" data-value="@Model.dt.Rows[0]["Id"]">
+                        <span>
+                            @Model.dt.Rows[0]["Address"] <br />
+                            GSTIN: @Model.dt.Rows[0]["GSTIN"]<br />
+                            Tel: @Model.dt.Rows[0]["Mobile_No"]
+                        </span>
+                    </label>
+                </p>
+            </div>
+        </div>
+        <div class="col s12 m12 l12">
+            <br /><br />
+            <a target="_blank" href="../Master/AddClient?clientid=@Model.Id" class="display-flex">
+                <i class="material-icons">edit</i>
+                <span style="padding-top:5px;">Add/Edit Address</span>
+            </a>
+        </div>
+    }
+
+    @if (Model.dt.Rows.Count == 0)
+    {
+        <div class="col s12 m12 l12">
+            <br />
+            <span>No address found...</span> <br /><br />
+            <a target="_blank" href="../Master/AddClient?clientid=@Model.Id" class="display-flex">
+                <i class="material-icons">edit</i>
+                <span style="padding-top:5px;">Add Address</span>
+            </a>
+        </div>
+        <div class="input-field col s12">
+            <button class="modal-action modal-close btn orange waves-effect waves-light right" id="btnSelectClientShippAddress" type="button" name="action">
+                Cancel
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="input-field col s12">
+            <button class="modal-action modal-close btn cyan waves-effect waves-light right" id="btnSelectClientShippAddress" type="button" name="action">
+                Select
+            </button>
+        </div>
+    }
+
+
+</div>

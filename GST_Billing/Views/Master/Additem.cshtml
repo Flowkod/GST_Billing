@@ -1,0 +1,227 @@
+﻿@model GST_Billing.Models.ItemManagement
+@{
+    ViewBag.Title = ViewBag.Title;
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+<div class="row">
+    <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+        <!-- Search for small screen-->
+        <div class="container">
+            <div class="row">
+                <div class="col s10 m6 l6">
+                    <h5 class="breadcrumbs-title mt-0 mb-0"><span>Add/Update Item </span></h5>
+                    <ol class="breadcrumbs mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="../Home/index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#">Master</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="../Master/item">Item</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Add/Update Item
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="seaction">
+    <!--Basic Form-->
+    <!-- jQuery Plugin Initialization -->
+    <div class="row">
+        <!-- Form Advance -->
+        <div class="col s12 m12 l12">
+            <div id="Form-advance" class="card card card-default scrollspy">
+                <div class="card-content">
+                    @using (Html.BeginForm("AddItem", "Master", FormMethod.Post))
+                    {
+                        <h4 class="card-title">
+                            Item Type
+                            <label class="ml-3">
+                                @Html.RadioButtonFor(m => m.Item_Type_Id, "2", new { @checked = "checked" })
+                                <span>Product</span>
+                            </label>
+                            <label class="ml-3">
+                                @Html.RadioButtonFor(m => m.Item_Type_Id, "3")
+                                <span>Service</span>
+                            </label>
+                        </h4>
+                        <div class="row">
+                            <div class="input-field col m6 s12">
+                                @Html.TextBoxFor(m => m.Item_Name)
+                                <label>Item Name*</label>
+                                <div class="error">
+                                    @Html.ValidationMessageFor(m => m.Item_Name, "")
+                                </div>
+                            </div>
+
+                            <div class="input-field col m6 s12">
+                                @Html.TextBoxFor(m => m.Item_Code)
+                                <label for="first_name01">Item Code*</label>
+                                <div class="error">
+                                    @Html.ValidationMessageFor(m => m.Item_Code, "")
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="input-field col m6 s12">
+                                @Html.TextBoxFor(m => m.Item_Short_Name)
+                                <label>Item Short Name</label>
+                            </div>
+
+                            <div class="input-field col m6 s12">
+                                @Html.TextBoxFor(m => m.Item_Group)
+                                <label for="first_name01">Item Group</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                @Html.TextBoxFor(m => m.Description)
+                                <label for="Description">Description</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="input-field col m4 s12">
+                                @Html.DropDownListFor(m => m.UOM_Unit, new SelectList(Model.Item_Units_List, "Value", "Text"), "Item Unit", new { @id = "PageItemUnitList", @class = "select2 item-unit browser-default" })
+                            </div>
+                            <!-- Modal Structure -->
+
+                            <div class="input-field col m4 s12">
+                                @Html.TextBoxFor(m => m.UOM_Qty, new { @type = "number" })
+                                <label for="first_name01">UOM Qty</label>
+                            </div>
+                            <div class="input-field col m4 s12">
+                                @Html.DropDownListFor(m => m.Tax_id, new SelectList(Model.Tax_List, "Value", "Text"), "Tax", new { @id = "PageTaxList", @class = "select2 tax browser-default" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.HSN_SAC)
+                                <label>HSN/SAC</label>
+                            </div>
+
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.Purchase_Price, new { @type = "number" })
+                                <label for="first_name01">Purchase Price</label>
+                            </div>
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.Sale_Price, new { @type = "number" })
+                                <label for="first_name01">Sale Price</label>
+                            </div>
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.MRP, new { @type = "number" })
+                                <label for="first_name01">MRP</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.Discount, new { @type = "number" })
+                                <label>Discount (In %)</label>
+                            </div>
+
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.Gross_Weight, new { @type = "number" })
+                                <label for="first_name01">Gross Weight</label>
+                            </div>
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.Net_Weight, new { @type = "number" })
+                                <label for="first_name01">Net Weight</label>
+                            </div>
+                            <div class="input-field col m3 s12">
+                                @Html.TextBoxFor(m => m.Minimum_Stock, new { @type = "number" })
+                                <label for="first_name01">MInimum Stock Alert</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                @Html.HiddenFor(m=>m.Id)
+                                <button class="btn cyan waves-effect waves-light right" type="submit" name="action">
+                                    Submit
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <div id="dialog">
+        </div>
+        <div class="row" id="loading">
+            <div class="col s12 m12 center">
+                <div class="preloader-wrapper small active">
+                    <div class="spinner-layer spinner-blue">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                    <div class="spinner-layer spinner-red">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                    <div class="spinner-layer spinner-yellow">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                    <div class="spinner-layer spinner-green">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using System.Web.Optimization
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+
+@section footercontent
+{
+    <!-- BEGIN PAGE LEVEL JS-->
+    <script src="../../../app-assets/js/scripts/advance-ui-modals.js"></script>
+    <script src="~/app-assets/js/GstBillCustom.js"></script>
+}

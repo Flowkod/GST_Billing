@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = @ViewBag.Title;
+    Layout = null;
+}
+<style>
+    body {
+        margin: 0;
+    }
+</style>
+
+<iframe id="iframe" width="100%" style="border:none;height: -webkit-fill-available;"></iframe>
+@using System.Web.Optimization
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+@if (Request.QueryString["Addedfrom"] == "purchase supplier")
+{
+    <script>
+        $("#iframe").attr('src', "../Master/AddSupplier?Addedfrom=@Request.QueryString["Addedfrom"]");
+    </script>
+}
+
+@if (Request.QueryString["Addedfrom"] == "purchase client")
+{
+    <script>
+        $("#iframe").attr('src', "../Master/AddClient?Addedfrom=@Request.QueryString["Addedfrom"]");
+    </script>
+}
+
+
+<script>
+    function closew() {
+        window.close();
+    }
+</script>
+

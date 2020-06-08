@@ -1,0 +1,74 @@
+﻿@model GST_Billing.Models.UserManagement
+
+
+<h4>Add Department</h4>
+<form id="DepartmentForm">
+    <div class="row">
+        <div class="input-field col m6 s12">
+            @Html.TextBoxFor(m => m.Department, new { @id = "Department" })
+            <label>Department*</label>
+            <div class="error">
+                @Html.ValidationMessageFor(m => m.Department, "")
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12">
+            <button class="btn cyan waves-effect waves-light right" id="btnAddDepartment" type="button" name="action">
+                Submit
+                <i class="material-icons right">send</i>
+            </button>
+            <a href="#!" class="red btn btn-reset modal-action modal-close right mr-1"><i class="material-icons left">clear</i>Cancel</a>
+        </div>
+    </div>
+</form>
+
+@using System.Web.Optimization
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+<script src="../../../app-assets/js/vendors.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $("#btnAddDepartment").click(function (e) {
+            //Serialize the form datas.
+            var valdata = $("#DepartmentForm").serialize();
+
+            if ($("#Department").val() == "") {
+                $("#Department").focus();
+            }
+            else {
+
+                $.ajax({
+                    url: "/Master/AddDepartment",
+                    type: "POST",
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: valdata,
+                    dataType: 'json',
+                    beforeSend: function () {
+                        document.getElementById('dialog').style.display = "none";
+                        document.getElementById('loading').style.display = "block";
+                    },
+                    complete: function () {
+                        document.getElementById('dialog').style.display = "block";
+                        document.getElementById('loading').style.display = "none";
+                    },
+                    success: function (response) {
+                        $("#PageDepartmentList").append("<option value='" + response + "'>" + $("#Department").val() + " </option>");
+                        $("#PageDepartmentList").val(response);
+                        $("#PageDepartmentList").change();
+                        $('#modal1').modal('close');
+                        $('#dialog').empty();
+                        CustomToastCall("A new department has been addedd");
+                    },
+                    failure: function (xhr, status, error) {
+                        alert(error);
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        });
+    });
+</script>

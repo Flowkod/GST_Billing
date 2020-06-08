@@ -1,0 +1,714 @@
+﻿@model  GST_Billing.Models.PurchaseOrderManagement
+
+@{
+    ViewBag.Title = "Purchaseorder";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-invoice.css">
+
+<style>
+    textarea {
+        height: 80px !important;
+    }
+
+    .companyname {
+        font-weight: bold;
+        font-size: 28px;
+    }
+
+    #BillAddressDiv input {
+        height: 1rem;
+    }
+
+    #BillAddressDiv textarea {
+        height: 60px !important;
+    }
+
+    #BillAddressDiv span {
+        width: 100px;
+    }
+
+    #loading {
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        margin: auto;
+        left: 0;
+        height: -webkit-fill-available;
+        background-color: #fafafa96;
+        width: 100%;
+    }
+
+        #loading .loadicon {
+            margin-top: 25%;
+        }
+</style>
+
+<!-- app invoice View Page -->
+<section class="invoice-edit-wrapper section">
+    <div class="row">
+        <!-- invoice view page -->
+        <div class="col xl9 m8 s12">
+            <div class="card">
+                <div class="card-content">
+                    <!-- header section -->
+                    <div class="row mb-3">
+                        <div class="col xl4 m12 display-flex align-items-center">
+                            <h6 class="invoice-number mr-4 mb-5">PO.No#</h6>
+                            <input type="text">
+                        </div>
+                        <div class="col xl8 m12">
+                            <div class="invoice-date-picker display-flex align-items-center">
+                                <div class="display-flex align-items-center">
+                                    <small>Date: </small>
+                                    <div class="display-flex ml-4">
+                                        <input type="text" class="datepicker mr-2 mb-1" value="@System.DateTime.Now.ToString("dd/MM/yyyy")">
+                                    </div>
+                                </div>
+                                <div class="display-flex align-items-center">
+                                    <small>Delivery Period: </small>
+                                    <div class="display-flex ml-4">
+                                        <input type="text" class="datepicker mb-1" value="@System.DateTime.Now.ToString("dd/MM/yyyy")">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- logo and title -->
+                    <div class="row mb-3 display-flex">
+                        <div class="col m6 s12 invoice-logo pt-1 push-m6 right-align m-auto">
+                            @if (Convert.ToString(Model.dtCompanyDetails.Rows[0]["Company_Logo"]) != "")
+                            {
+                                <img src="@Convert.ToString(Model.dtCompanyDetails.Rows[0]["Company_Logo"])" alt="logo" width="164" />
+                            }
+                            else
+                            {
+                                <h4 class="indigo-text orange-text companyname">@Convert.ToString(Model.dtCompanyDetails.Rows[0]["Company_Name"])</h4>
+                            }
+
+                        </div>
+                        <div class="col m6 s12 pull-m6">
+                            <h4 class="indigo-text">Purchase Order</h4>
+                        </div>
+                    </div>
+                    <!-- invoice address and contact -->
+                    <div class="row mb-3">
+                        <div class="col l6 s12">
+                            <h6>Bill To</h6>
+                            <div class="input-field">
+                                @Html.DropDownListFor(m => m.Supplier_Id, new SelectList(Model.SupplierList, "Value", "Text"), "Supplier Name", new { @id = "SupplierList", @class = "select2 item-unit browser-default" })
+                            </div>
+                            <div id="BillAddressDiv" class="row">
+                                <div class="col m12 input-field m-0">
+                                    <textarea id="billAddressText" class="materialize-textarea" style="height:80px;"></textarea>
+                                </div>
+                                <label class="col m2">
+                                    GSTIN:
+                                </label>
+                                <div class="col m10 input-field m-0 inline">
+                                    <input type="text" id="GSTIN" />
+                                </div>
+                                <br />
+                                <label class="col m2">Tel:</label>
+                                <div class="col m10 input-field m-0 inline">
+                                    <input type="text" id="Tel" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l6 s12">
+
+                        </div>
+                    </div>
+                    <!-- product details table-->
+                    <div class="invoice-product-details mb-3">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>UOM Unit</th>
+                                    <th>Qty</th>
+                                    <th>Rate</th>
+                                    <th>Dis.</th>
+                                    <th>CGST</th>
+                                    <th>SGST</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Frest Admin Template
+                                    </td>
+                                    <td>Bag</td>
+                                    <td>10</td>
+                                    <td>15</td>
+                                    <td>10%</td>
+                                    <td>9%</td>
+                                    <td>9%</td>
+                                    <td>20,000 Rs</td>
+                                    <td>
+                                        <span data-repeater-delete class="delete-row-btn">
+                                            <i class="material-icons">clear</i>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="invoice-product-details mb-3">
+                        <form class="form invoice-item-repeater">
+                            <div data-repeater-list="group-a">
+                                <div class="mb-2" data-repeater-item>
+                                    <!-- invoice Titles -->
+                                    <div class="row mb-1">
+                                        <div class="col s3 m4">
+                                            <h6 class="m-0">Item</h6>
+                                        </div>
+                                        <div class="col s3">
+                                            <h6 class="m-0">UOM Unit</h6>
+                                        </div>
+                                        <div class="col s3">
+                                            <h6 class="m-0">Qty</h6>
+                                        </div>
+                                        <div class="col s3 m2">
+                                            <h6 class="m-0">Rate</h6>
+                                        </div>
+                                    </div>
+                                    <div class="invoice-item display-flex mb-1">
+                                        <div class="invoice-item-filed row pt-1">
+                                            <div class="col s12 m4 input-field">
+                                                <select class="select2 item browser-default">
+                                                    <option value="Frest Admin Template">Frest Admin Template</option>
+                                                    <option value="Stack Admin Template">Stack Admin Template</option>
+                                                    <option value="Robust Admin Template">Robust Admin Template</option>
+                                                    <option value="Apex Admin Template">Apex Admin Template</option>
+                                                    <option value="Modern Admin Template">Modern Admin Template</option>
+                                                </select>
+                                            </div>
+                                            <div class="col m3 s12 input-field">
+                                                <input type="text" value="24">
+                                            </div>
+                                            <div class="col m3 s12 input-field">
+                                                <input type="number" value="1">
+                                            </div>
+                                            <div class="col m2 s12 input-field">
+                                                <input type="number" value="$24">
+                                            </div>
+                                            <div class="col m2 s12 input-field">
+                                                <input type="text" class="invoice-item-desc" placeholder="Serial No">
+                                            </div>
+                                            <div class="col m4 s12 input-field">
+                                                <input type="text" class="invoice-item-desc" placeholder="Note">
+                                            </div>
+                                            <div class="col m4 s12 input-field row">
+                                                <div class="col m4">
+                                                    <span>Dis. </span> <br />
+                                                    <span class="discount-value mr-1">20%</span>
+                                                </div>
+                                                <div class="col m4">
+                                                    <span>CGST </span> <br />
+                                                    <span class="discount-value mr-1">10%</span>
+                                                </div>
+                                                <div class="col m4">
+                                                    <span>SGST </span> <br />
+                                                    <span class="discount-value mr-1">10%</span>
+                                                </div>
+                                            </div>
+                                            <div class="col m2 s12 input-field right-align">
+                                                <span class="green-text strong">Total:<br />  200000 Rs </span>
+                                            </div>
+                                        </div>
+                                        <div class="invoice-icon display-flex flex-column justify-content-between">
+                                            <span data-repeater-delete class="delete-row-btn">
+                                                <i class="material-icons">clear</i>
+                                            </span>
+                                            <div class="dropdown">
+                                                <i class="material-icons dropdown-button" data-target="dropdown-discount">brightness_low</i>
+                                                <div class="dropdown-content" id="dropdown-discount">
+                                                    <div class="row mr-0 ml-0">
+                                                        <div class="col s12 input-field">
+                                                            <label for="discount">Discount(%)</label>
+                                                            <input type="number" id="discount" value="0">
+                                                        </div>
+                                                        <div class="col s12">
+                                                            <select id="Tax1" class="invoice-tax browser-default">
+                                                                <option value="0%" selected disabled>GST</option>
+                                                                <option value="1%">1%</option>
+                                                                <option value="10%">10%</option>
+                                                                <option value="18%">18%</option>
+                                                                <option value="40%">40%</option>
+                                                            </select>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="display-flex justify-content-between mt-4">
+                                                        <button type="button" class="btn invoice-apply-btn">
+                                                            <span>Apply</span>
+                                                        </button>
+                                                        <button type="button" class="btn invoice-cancel-btn ml-1 indigo">
+                                                            <span>Cancel</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <button class="btn invoice-repeat-btn" data-repeater-create type="button">
+                                    <i class="material-icons left">add</i>
+                                    <span>Add Item</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- invoice subtotal -->
+                    <div class="invoice-subtotal">
+                        <div class="row">
+                            <div class="col m7 s12">
+                                <div id="ShipAddressDiv">
+                                    <h6>Ship To</h6>
+                                    <div class="input-field">
+                                        <p class="mb-1">
+                                            <label>
+                                                <input name="group1" type="radio" id="ShippingAddressType" value="ShipCompanyAddress">
+                                                <span>Com. Add.</span>
+                                            </label>
+                                            <label>
+                                                <input name="group1" type="radio" id="ShippingAddressType" value="ShipClientAddress">
+                                                <span>Client Add.</span>
+                                            </label>
+                                            <label>
+                                                <input name="group1" type="radio" id="ShippingAddressType" value="ShipAddnewAddress">
+                                                <span>Add New</span>
+                                            </label>
+                                        </p>
+                                    </div>
+
+                                    <div class="input-field hide" id="ShipCompanyAddressDiv">
+                                        <span id="CompanyShipAddressLable">
+                                            @Model.dtCompanyDetails.Rows[0]["Shipping_Address"] <br />
+                                            GSTIN: @Model.dtCompanyDetails.Rows[0]["GSTIN"]<br />
+                                            Tel: @Model.dtCompanyDetails.Rows[0]["Mobile_No"]
+                                            <a id="EditCompanyShipAddress" href="javascript:void(0)" class="mr-3 display-flex right"><i class="material-icons">edit</i> <span>Edit</span></a>
+                                        </span>
+                                        <span id="EditCompanyShipAddressText" class="hide">
+                                            <textarea class="materialize-textarea">@Model.dtCompanyDetails.Rows[0]["Shipping_Address"] &#10;GSTIN: @Model.dtCompanyDetails.Rows[0]["GSTIN"] &#10;Tel: @Model.dtCompanyDetails.Rows[0]["Mobile_No"]</textarea>
+                                        </span>
+                                    </div>
+                                    <div class="input-field hide" id="ShipClientAddressDiv">
+                                        @Html.DropDownListFor(m => m.Ship_To_Client_Id, new SelectList(Model.ClientList, "Value", "Text"), "Client Name", new { @id = "ClientList", @class = "select2 item-unit browser-default" })
+                                        @Html.HiddenFor(m=>m.Client_Ship_Address_Id,new { @id="Client_Ship_Address_Id"})
+                                        <span class="display-block mt-3" id="ClientShipAddressLable">
+
+                                        </span>
+                                    </div>
+                                    <div class="input-field hide" id="ShipAddnewAddressDiv">
+                                        <label>Add New Shipping Address</label>
+                                        <textarea id="AddnewShippAddress message5" class="materialize-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div id="PaymentTermsDiv" class="input-field">
+                                    <label>Payment Terms</label>
+                                    <input type="text">
+                                </div>
+                                <div class="input-field" id="TransportDiv">
+                                    <label>Transport</label>
+                                    <input type="text">
+                                </div>
+                                <div class="input-field" id="ClientNotesDiv">
+                                    <label>Note</label>
+                                    <textarea id="message5" class="materialize-textarea" style="height: 80px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="col m5 s12">
+                                <ul>
+                                    <li class="display-flex justify-content-between">
+                                        <span class="invoice-subtotal-title">Subtotal</span>
+                                        <h6 class="invoice-subtotal-value">$72.00</h6>
+                                    </li>
+                                    <li class="display-flex justify-content-between">
+                                        <span class="invoice-subtotal-title">Discount</span>
+                                        <h6 class="invoice-subtotal-value">- $ 09.60</h6>
+                                    </li>
+                                    <li class="display-flex justify-content-between">
+                                        <span class="invoice-subtotal-title">Tax</span>
+                                        <h6 class="invoice-subtotal-value">21%</h6>
+                                    </li>
+                                    <li>
+                                        <div class="divider mt-2 mb-2"></div>
+                                    </li>
+                                    <li class="display-flex justify-content-between">
+                                        <span class="invoice-subtotal-title">Invoice Total</span>
+                                        <h6 class="invoice-subtotal-value">$ 61.40</h6>
+                                    </li>
+                                    <li class="display-flex justify-content-between">
+                                        <span class="invoice-subtotal-title">Paid to date</span>
+                                        <h6 class="invoice-subtotal-value">- $ 00.00</h6>
+                                    </li>
+                                    <li class="display-flex justify-content-between">
+                                        <span class="invoice-subtotal-title">Balance (USD)</span>
+                                        <h6 class="invoice-subtotal-value">$ 10,953</h6>
+                                    </li>
+                                    <li class=" mt-2">
+                                        <a href="app-invoice-view.html" class="btn indigo waves-effect waves-light display-flex align-items-center justify-content-center">Save</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- invoice action  -->
+        <div class="col xl3 m4 s12">
+            <div class="card invoice-action-wrapper mb-10">
+                <div class="card-content">
+                    <div class="mb-3">
+                        <div class="invoice-terms display-flex flex-column">
+                            <div class="display-flex justify-content-between pb-4">
+                                <span>Ship Address</span>
+                                <div class="switch">
+                                    <label>
+                                        <input type="checkbox" checked name="ShipAddress" class="PoContent">
+                                        <span class="lever"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="display-flex justify-content-between pb-4">
+                                <span>Payment Terms</span>
+                                <div class="switch">
+                                    <label>
+                                        <input type="checkbox" checked name="PaymentTerms" class="PoContent">
+                                        <span class="lever"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="display-flex justify-content-between pb-4">
+                                <span>Client Notes</span>
+                                <div class="switch">
+                                    <label>
+                                        <input type="checkbox" checked name="ClientNotes" class="PoContent">
+                                        <span class="lever"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="display-flex justify-content-between pb-4">
+                                <span>Transport</span>
+                                <div class="switch">
+                                    <label>
+                                        <input type="checkbox" checked name="Transport" class="PoContent">
+                                        <span class="lever"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="display-flex justify-content-between pb-4">
+                                <span>Terms & Conditions</span>
+                                <div class="switch">
+                                    <label>
+                                        <input type="checkbox" checked name="TermsCondition" class="PoContent">
+                                        <span class="lever"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <div id="dialog">
+
+        </div>
+    </div>
+</div>
+
+<div class="row hide" id="loading">
+    <div class="col s12 m12 center loadicon">
+        <div class="preloader-wrapper small active">
+            <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section footercontent
+{
+    @*<script src="../../../app-assets/vendors/form_repeater/jquery.repeater.min.js"></script>*@
+
+    <script src="../../../app-assets/js/scripts/advance-ui-modals.js"></script>
+    <script src="../app-assets/js/scripts/app-invoice.js"></script>
+
+    <script>
+        $(".item").select2({
+            /* the following code is used to disable x-scrollbar when click in select input and
+            take 100% width in responsive also */
+            dropdownAutoWidth: true,
+            width: '100%',
+        }).select2()
+            .on('select2:open', () => {
+                $(".select2-results:not(:has(a))").append('<div style="width:100%; border-top:solid 1px #cccccc; padding:15px;"><a id="AddDesignationClick" class="modal-trigger" href="#modal1"><i class="material-icons left">add</i> Add New</a></div>');
+            });
+
+
+        $(document).on('change', '.PoContent', function () {
+            var name = $(this).attr('name');
+
+            if ($(this).prop("checked") == true) {
+                $("#" + name + "Div").removeClass("hide");
+            }
+            else {
+                $("#" + name + "Div").addClass("hide");
+            }
+        });
+
+        $(document).on('change', '#ShippingAddressType', function () {
+            var value = $(this).attr('value');
+
+            $("#ShipCompanyAddressDiv").addClass("hide");
+            $("#ShipClientAddressDiv").addClass("hide");
+            $("#ShipAddnewAddressDiv").addClass("hide");
+
+            if ($(this).prop("checked") == true) {
+                $("#" + value + "Div").removeClass("hide");
+            }
+
+        });
+
+        $("#SupplierList").select2({
+            /* the following code is used to disable x-scrollbar when click in select input and
+            take 100% width in responsive also */
+            dropdownAutoWidth: true,
+            width: '100%',
+        }).select2()
+            .on('select2:open', () => {
+                $(".select2-results:not(:has(a))").append('<div style="width:100%; border-top:solid 1px #cccccc; padding:15px;"><a id="AddSupplierClick" href="javascript:void(0)"><i class="material-icons left">add</i> Add New</a></div>');
+            });
+
+        $(document).on('click', '#AddSupplierClick', function () {
+
+            let newAddSuppierWindow = window.open('../Purchase/Addnewentry?Addedfrom=purchase supplier', 'Supplier');
+
+            newAddSuppierWindow.onunload = function () {
+                //newWindow.close();
+                if (newAddSuppierWindow.closed == true) {
+
+                    $.ajax({
+                        url: "/Purchase/GetNewAddeddSupplierRecord",
+                        type: "Get",
+                        dataType: 'json',
+                        beforeSend: function () {
+                            $("#loading").removeClass("hide");
+                        },
+                        complete: function () {
+                            $("#loading").addClass("hide");
+                        },
+                        success: function (response) {
+
+                            $("#SupplierList").append("<option value=" + response[0] + ">" + response[1] + " </option>");
+                            $("#SupplierList").val(response[0]);
+                            $("#SupplierList").change();
+                            $('#SupplierList option[value=' + response[0] + ']').prop('selected', true);
+
+                            swal({ title: 'Success', icon: 'success' });
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            };
+        });
+
+
+        $(document).on('change', '#SupplierList', function () {
+
+            var Supplier_ID = $("#SupplierList").val();
+
+            if (Supplier_ID != "") {
+                $.ajax({
+                    url: "/Purchase/GetsupplierBillAddress",
+                    type: "Get",
+                    data: { Supplier_Id: Supplier_ID },
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $("#loading").removeClass("hide");
+                    },
+                    complete: function () {
+                        $("#loading").addClass("hide");
+                    },
+                    success: function (response) {
+
+                        $("#billAddressText").val(response[0]);
+                        $("#GSTIN").val(response[1]);
+                        $("#Tel").val(response[2]);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+            else {
+                $("#billAddressText").val('');
+                $("#GSTIN").val('');
+                $("#Tel").val('');
+            }
+        });
+
+
+        $("#ClientList").select2({
+            /* the following code is used to disable x-scrollbar when click in select input and
+            take 100% width in responsive also */
+            dropdownAutoWidth: true,
+            width: '100%',
+        }).select2()
+            .on('select2:open', () => {
+                $(".select2-results:not(:has(a))").append('<div style="width:100%; border-top:solid 1px #cccccc; padding:15px;"><a id="AddClientClick" href="javascript:void(0)" ><i class="material-icons left">add</i> Add New</a></div>');
+            });
+
+        $(document).on('click', '#AddClientClick', function () {
+            let newAddSuppierWindow = window.open('../Purchase/Addnewentry?Addedfrom=purchase client', 'Client');
+
+            newAddSuppierWindow.onunload = function () {
+                //newWindow.close();
+                if (newAddSuppierWindow.closed == true) {
+
+                    $.ajax({
+                        url: "/Purchase/GetNewAddeddClientRecord",
+                        type: "Get",
+                        dataType: 'json',
+                        beforeSend: function () {
+                            $("#loading").removeClass("hide");
+                        },
+                        complete: function () {
+                            $("#loading").addClass("hide");
+                        },
+                        success: function (response) {
+
+                            $("#ClientList").append("<option value=" + response[0] + ">" + response[1] + " </option>");
+                            $("#ClientList").val(response[0]);
+                            $("#ClientList").change();
+                            $('#ClientList option[value=' + response[0] + ']').prop('selected', true);
+
+                            swal({ title: 'Success', icon: 'success' });
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            };
+        });
+
+
+        $(document).on('change', '#ClientList', function () {
+
+            var Client_ID = $("#ClientList").val();
+
+            if (Client_ID != "") {
+
+                $('#modal1').modal('open');
+
+                $.ajax({
+                    url: "/Purchase/GetClientShipAddress",
+                    type: "Get",
+                    data: { Client_ID: Client_ID },
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    beforeSend: function () {
+                        $("#loading").removeClass("hide");
+                    },
+                    complete: function () {
+                        $("#loading").addClass("hide");
+                    },
+                    success: function (response) {
+
+                        $('#dialog').empty();
+                        $('#dialog').html(response);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            } else {
+                 $("#ClientShipAddressLable").html('');
+            }
+        });
+
+        $(document).on('change', '#popup_rdoClientShippingAddress', function () {
+            var value = $(this).attr('value');
+            var data_value=$(this).attr('data-value');
+
+            $("#Client_Ship_Address_Id").val(data_value);
+            $("#ClientShipAddressLable").html(value);
+
+        });
+
+        $(document).on('click', '#EditCompanyShipAddress', function () {
+            $("#EditCompanyShipAddressText").removeClass("hide");
+            $("#CompanyShipAddressLable").addClass("hide");
+        });
+
+    </script>
+}

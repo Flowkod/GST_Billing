@@ -1,0 +1,75 @@
+﻿@model GST_Billing.Models.ItemUnitManagement
+
+<h4>Add Item Unit</h4>
+<form id="ItenUnitForm">
+    <div class="row">
+        <div class="input-field col m6 s12">
+            @Html.TextBoxFor(m => m.Unit_Name, new { @id = "UnitName" })
+            <label>Unit Name*</label>
+            <div class="error">
+                @Html.ValidationMessageFor(m => m.Unit_Name, "")
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12">
+            <button class="btn cyan waves-effect waves-light right" id="btnAddItemUnit" type="button" name="action">
+                Submit
+                <i class="material-icons right">send</i>
+            </button>
+            <a href="#!" class="red btn btn-reset modal-action modal-close right mr-1"><i class="material-icons left">clear</i>Cancel</a>
+        </div>
+    </div>
+</form>
+
+@using System.Web.Optimization
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+<script src="../../../app-assets/js/vendors.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $("#btnAddItemUnit").click(function (e) {
+            //Serialize the form datas.
+            var valdata = $("#ItenUnitForm").serialize();
+
+            if ($("#UnitName").val() == "") {
+                $("#UnitName").focus();
+            }
+            else {
+
+                $.ajax({
+                    url: "/Master/AddItemUnit",
+                    type: "POST",
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: valdata,
+                    dataType: 'json',
+                    beforeSend: function () {
+                        document.getElementById('dialog').style.display = "none";
+                        document.getElementById('loading').style.display = "block";
+                    },
+                    complete: function () {
+                        document.getElementById('dialog').style.display = "block";
+                        document.getElementById('loading').style.display = "none";
+                    },
+                    success: function (response) {
+                        $("#PageItemUnitList").append("<option value='" + response + "'>" + $("#UnitName").val() + " </option>");
+                        $("#PageItemUnitList").val(response);
+                        $("#PageItemUnitList").change();
+                        //$("#modal1").modal().hide();
+                        $('#modal1').modal('close');
+                        $('#dialog').empty();
+                        CustomToastCall("The new item unit has been addedd");
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        });
+    });
+</script>

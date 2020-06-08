@@ -1,0 +1,129 @@
+﻿@model GST_Billing.Models.UserManagement
+@{
+    ViewBag.Title = "Userprofile";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/page-users.css">
+
+<div class="row">
+    <div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+        <!-- Search for small screen-->
+        <div class="container">
+            <div class="row">
+                <div class="col s10 m6 l6">
+                    <h5 class="breadcrumbs-title mt-0 mb-0"><span>User Details</span></h5>
+                    <ol class="breadcrumbs mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="../Home/index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#">Account</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Profile
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section users-view">
+    <!-- users view media object start -->
+    <div class="card-panel">
+        <div class="row">
+            <div class="col s12 m12">
+                <div class="display-flex media">
+                    <a href="#" class="avatar">
+                        <img src="../../../app-assets/images/avatar/avatar-15.png" alt="users view avatar" class="z-depth-4 circle"
+                             height="64" width="64">
+                    </a>
+                    <div class="media-body pl-4">
+                        <h6 class="media-heading">
+                            <span class="users-view-name">@Convert.ToString(Model.dt.Rows[0]["Name"])</span>
+                        </h6>
+                        <span>Email:</span>
+                        <span class="users-view-id">@Convert.ToString(Model.dt.Rows[0]["Email"])</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- users view media object ends -->
+    <!-- users view card details start -->
+    <div class="card">
+        <div class="card-content">
+            <div class="row">
+                <div class="col s5">
+                    <table class="striped">
+                        <tbody>
+                            <tr>
+                                <td>Name:</td>
+                                <td class="users-view-username">@Convert.ToString(Model.dt.Rows[0]["Name"])</td>
+                            </tr>
+                            <tr>
+                                <td>Mobile No:</td>
+                                <td class="users-view-name">@Convert.ToString(Model.dt.Rows[0]["Mobile"])</td>
+                            </tr>
+                            <tr>
+                                <td>E-mail:</td>
+                                <td class="users-view-email">@Convert.ToString(Model.dt.Rows[0]["Email"])</td>
+                            </tr>
+                            <tr>
+                                <td>Created On:</td>
+                                <td>@Convert.ToDateTime(Model.dt.Rows[0]["Joining_Date"]).ToString("dd MMM yyyy HH:mm tt")</td>
+                            </tr>
+                            <tr>
+                                <td>Last Modified:</td>
+                                <td>
+                                    @if (Convert.ToString(Model.dt.Rows[0]["Modified_On"]) != "")
+                                    {
+                                        <span> @Convert.ToDateTime(Model.dt.Rows[0]["Modified_On"]).ToString("dd MMM yyyy HH:mm tt")</span>
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="col s5">
+                    @using (Html.BeginForm("Userprofile", "Account",FormMethod.Post))
+                    {
+                        <h6 class="mb-10 mt-2">Change Password</h6>
+                        <div class="input-field">
+                            @Html.TextBoxFor(m => m.OldPassword, new { @type = "password", @class = "validate m-0" })
+                            <label for="username">Old Password</label>
+                            <div class="error">
+                                @Html.ValidationMessageFor(m => m.OldPassword, "")
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            @Html.TextBoxFor(m => m.Password, new { @type = "password", @class = "validate m-0" })
+                            <label for="username">New Password</label>
+                            <div class="error">
+                                @Html.ValidationMessageFor(m => m.Password, "")
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            @Html.TextBoxFor(m => m.ConfirmPassword, new { @type = "password", @class = "validate m-0" })
+                            <label for="username">Confirm Password</label>
+                            <div class="error">
+                                @Html.ValidationMessageFor(m => m.ConfirmPassword, "")
+                            </div>
+                        </div>
+                        <button type="submit" class="btn indigo">
+                            Change Password
+                        </button>
+                    }
+                </div>
+            </div>
+            <!-- </div> -->
+        </div>
+    </div>
+    <!-- users view card details ends -->
+</div>
+@using System.Web.Optimization
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")

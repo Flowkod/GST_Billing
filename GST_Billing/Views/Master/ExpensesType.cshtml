@@ -1,0 +1,169 @@
+﻿@model  GST_Billing.Models.ExpensesManagement
+@{
+    ViewBag.Title = "Expenses";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-invoice.min.css" />
+<link href="~/app-assets/css/pages/app-invoice.css" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-sidebar.css" />
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-email.css" />
+
+<style>
+    .select2-container {
+        z-index: 9999999;
+    }
+
+    #loading {
+        display: none;
+    }
+
+    [type=checkbox] + span:not(.lever):before, [type=checkbox]:not(.filled-in) + span:not(.lever):after {
+        border: solid 2px #ddd;
+    }
+    #addExtype {
+        height: 3.2rem;
+        margin: 0;
+        padding-left: 1.5rem;
+        border: 1px solid #9e9e9e !important;
+        border-bottom: none;
+        border-radius: 150px;
+        background: white;
+    }
+    .btnAddExType {
+        height: 3.2rem;
+        padding: 5px 40px;
+        border-radius: 150px;
+    }
+    #dialog-data-table
+    {
+        background-color:white;
+        padding:5px;
+    }
+    .invoice-list-wrapper{
+        margin-top:25px;
+    }
+    
+#ExpensesTypeSearch:focus:not(.browser-default) {
+    color: #aaa;
+}
+</style>
+<!-- BEGIN: Page Main-->
+<!-- invoice list -->
+<section class="invoice-list-wrapper section mb-10">
+    <div class="responsive-table">
+        <div class="row">
+            @using (Html.BeginForm("ExpensesType", "Master", FormMethod.Post))
+            {
+                <div class="input-field col m3 s12"></div>
+                <div class="input-field col m5 s12">
+                    @Html.TextBoxFor(m => m.Type, new { @id = "addExtype", @placeholder = "Add Expenses Type", @required="required" })
+                    @Html.HiddenFor(m => m.Id)
+                </div>
+                <div class="input-field col m3 s12">
+                    @if (Request.QueryString["etypeid"] != null)
+                    {
+                        <button type="submit" class="btn waves-effect waves-light gradient-45deg-purple-deep-orange btnAddExType" href="../Master/Client" data-target="btn-filter">
+                            <i class="material-icons left">add</i> Update
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn waves-effect waves-light gradient-45deg-purple-deep-orange btnAddExType" href="../Master/Client" data-target="btn-filter">
+                            <i class="material-icons left">add</i> Save
+                        </button>
+                    }
+                </div>
+
+            }
+        </div>
+        <!-- create invoice button-->
+        <div class="row">
+            <div class="input-field col m8 s12">
+                @*<div class="result-count pl-1">
+                        <p>About @Model.dt1.Rows[0]["Total_Records"] result found...</p>
+                    </div>*@
+            </div>
+            <div class="input-field col m4 s12">
+                <input type="text" id="ExpensesTypeSearch" class="" placeholder="Search Expenses Type" aria-controls="example">
+            </div>
+        </div>
+        <div id="dialog-data-table">
+            @Html.Action("ExpensesTypeDataTable", "Master")
+        </div>
+
+    </div>
+
+    <div class="row" id="loading">
+        <div class="col s12">
+            <div id="circular-flashing" class="card card-tabs padding-10">
+                <div class="row">
+                    <div class="col s12 m12 center">
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-blue">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-red">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-yellow">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-green">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <form id="FormFilter">
+        <input type="hidden" name="Page_No" id="hid-page-no" />
+        <input type="hidden" name="Type" id="hid-type" />
+    </form>
+</section>
+<br />
+<!-- Add new email popup Ends-->
+
+@section footercontent
+{
+    <script src="../../../app-assets/js/scripts/form-select2.js"></script>
+    <script src="~/app-assets/js/GstBillCustom.js"></script>
+
+}
