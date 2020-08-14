@@ -30,16 +30,17 @@ namespace GST_Billing.Models
         public int Id { get; set; }
         public int Item_Type_Id { get; set; }
         [Required(ErrorMessage = "Item Code required")]
-        [Remote("IsItemCodeExist", "Master", ErrorMessage = "Item code already exist", AdditionalFields="Id")]
+        [Remote("IsItemCodeExist", "Master", ErrorMessage = "Item code already exist", AdditionalFields = "Id")]
         public string Item_Code { get; set; }
-        [Required (ErrorMessage ="Item Name required")]
+        [Required(ErrorMessage = "Item Name required")]
         public string Item_Name { get; set; }
         public string Item_Short_Name { get; set; }
         public string Description { get; set; }
         public string Item_Group { get; set; }
         public int? UOM_Qty { get; set; }
         public int? UOM_Unit { get; set; }
-        public int? Tax_id { get; set; }
+        public string Unit_Name { get; set; }
+        public decimal? Tax { get; set; }
         public string HSN_SAC { get; set; }
         public decimal? Purchase_Price { get; set; }
         public decimal? Sale_Price { get; set; }
@@ -100,10 +101,10 @@ namespace GST_Billing.Models
                 Command.Parameters.Add(new SqlParameter("@UOM_Unit", SqlDbType.Int)).Value = UOM_Unit;
             else
                 Command.Parameters.Add(new SqlParameter("@UOM_Unit", SqlDbType.Int)).Value = DBNull.Value;
-            if (Tax_id > 0)
-                Command.Parameters.Add(new SqlParameter("@Tax_id", SqlDbType.Int)).Value = Tax_id;
+            if (Tax > 0)
+                Command.Parameters.Add(new SqlParameter("@Tax", SqlDbType.Decimal)).Value = Tax;
             else
-                Command.Parameters.Add(new SqlParameter("@Tax_id", SqlDbType.Int)).Value = DBNull.Value;
+                Command.Parameters.Add(new SqlParameter("@Tax", SqlDbType.Decimal)).Value = DBNull.Value;
             if (HSN_SAC != string.Empty && HSN_SAC != null)
                 Command.Parameters.Add(new SqlParameter("@HSN_SAC", SqlDbType.VarChar)).Value = HSN_SAC;
             else

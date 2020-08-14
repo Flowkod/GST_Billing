@@ -56,7 +56,7 @@
                     {
                         @Html.HiddenFor(m => m.Item_Name)
                         @Html.HiddenFor(m => m.Item_Type_Id)
-                        @Html.HiddenFor(m => m.Tax_id)
+                        @Html.HiddenFor(m => m.Tax)
                         @Html.HiddenFor(m => m.Item_Type_Id)
                         @Html.HiddenFor(m => m.MRP)
                         @Html.HiddenFor(m => m.To_MRP)
@@ -64,7 +64,7 @@
                         @Html.HiddenFor(m => m.To_Discount)
                         @Html.HiddenFor(m => m.UOM_Unit)
                         <button type="submit" class="btn waves-effect waves-light border-round z-depth-4">
-                            <i class="material-icons">file_download</i> <span>Export To Excel</span>
+                            <i class="material-icons">file_download</i> <span class="hide-on-small-only">Export To Excel</span>
                         </button>
 
                     }
@@ -179,7 +179,7 @@
                     </div>
 
                     <div class="input-field col m6 s12">
-                        @Html.DropDownListFor(m => m.Tax_id, new SelectList(Model.Tax_List, "Value", "Text"), "Tax", new { @class = "select2 tax browser-default" })
+                        @Html.DropDownListFor(m => m.Tax, new SelectList(Model.Tax_List, "Value", "Text"), "Tax", new { @class = "select2 tax browser-default" })
                     </div>
 
                 </div>

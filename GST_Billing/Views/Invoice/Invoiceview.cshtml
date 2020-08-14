@@ -1,0 +1,327 @@
+﻿@model GST_Billing.Models.InvoiceManagement
+
+@{
+    ViewBag.Title = "Invoice";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-invoice.css">
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-sidebar.css">
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-email.css">
+<style>
+    .short-invoice-data-table tr td {
+        font-size: 12px;
+    }
+
+    .invoice-action-wrapper {
+        height: calc( 100vh - 100px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    #loading {
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        margin: auto;
+        left: 0;
+        height: -webkit-fill-available;
+        background-color: #fafafa96;
+        width: 100%;
+    }
+
+
+    .select2-container--open {
+        z-index: 99999;
+    }
+
+    .invoice-print-area small {
+        color: #bdbdbd;
+    }
+    .modal{
+        max-height:90% !important;
+    }
+        .modal input {
+            height: 2.5rem !important;
+            margin:0 !important;
+        }
+</style>
+
+<section class="invoice-view-wrapper section">
+    <div class="row">
+        <!-- invoice view page -->
+        <div class="col m9 s12 p-0">
+            <div class="card">
+                <div class="card-content invoice-print-area">
+                    <div class="row">
+                        <div class="col m4">
+                            <small id="Created_on" class="light"></small>
+                        </div>
+
+                        <div class="col m4">
+                            <small id="Modified_on" class="light"></small>
+                        </div>
+                        <div class="col m4">
+                            <small id="Modified_by" class="light"></small>
+                        </div>
+
+                        <div class="col s12 mt-3 mb-3">
+
+                            <div class="action-buttons">
+                                @*<button class="btn indigo waves-effect waves-light mb-1 mr-1 pl-1" id="po-action-status" value="Converted">
+                                        <i class="material-icons left">receipt</i>
+                                        Convert To Bill
+                                    </button>
+                                    <button class="waves-effect waves-light btn-light-cyan btn mb-1 mr-1 pl-1 invoice-print">
+                                        <i class="material-icons left">print</i> Print
+                                    </button>
+                                    <a class="waves-effect waves-light btn mb-1 mr-1 pl-1" href="../Document/Print.aspx?purchaseid=@Request.QueryString["purchaseid"]" target="_blank">
+                                        <i class="material-icons left">picture_as_pdf</i> PDF
+                                    </a>
+                                    <a class="waves-effect waves-light btn-light-indigo btn mb-1 mr-1 pl-1" href="../Purchase/AddPurchaseorder?purchaseid=@Request.QueryString["purchaseid"]">
+                                        <i class="material-icons left">create</i> Edit
+                                    </a>
+                                    <button class="waves-effect waves-light red btn mb-1 mr-1 pl-1" id="po-action-status" value="Cancelled">
+                                        <i class="material-icons left">cancel</i> Cancel
+                                    </button>*@
+                            </div>
+                        </div>
+                    </div>
+                    @if (Request.QueryString["Invoiceid"] != null)
+                    {
+                        <iframe id="preview-iframe" src="../Document/Print.aspx?Invoiceid=@Request.QueryString["Invoiceid"]" width="100%" style="border: none;
+    height: -webkit-fill-available;"></iframe>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- invoice action  -->
+
+        <div class="col m3 s12">
+            <div class="card invoice-action-wrapper">
+                <div class="card-content padding-2">
+                    <div class="row">
+                        <div class="col s10 m10">
+                            <h6 class="vertical-align-middle">
+                                <span>Filter Invoice</span>
+                            </h6>
+                        </div>
+                        <div class="col s2 m2">
+                            <a class="compose-email-trigger btn-floating waves-effect waves-light btn-light-indigo right" style="width:30px; height:30px;" href="#" data-target="btn-filter">
+                                <i class="material-icons dp48 right" style="line-height:35px;">filter_list</i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mb-3 padding-2">
+                        <input type="search" id="ShortClientSearch" class="" placeholder="Type Company Name" aria-controls="example">
+                    </div>
+
+                    <div id="dialog-data-table">
+                        @Html.Action("ShortDataTable", "Invoice")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row hide" id="loading">
+        <div class="col s12">
+            <div class="row" style="padding-top: 25%;">
+                <div class="col s12 m12 center">
+                    <div class="preloader-wrapper small active">
+                        <div class="spinner-layer spinner-blue">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                        <div class="spinner-layer spinner-red">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                        <div class="spinner-layer spinner-yellow">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                        <div class="spinner-layer spinner-green">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="email-compose-sidebar">
+    <div class="card quill-wrapper">
+        <div class="card-content pt-0">
+            <div class="card-header display-flex pb-2">
+                <h3 class="card-title">FILTER INVOICE LIST</h3>
+                <div class="close close-icon">
+                    <i class="material-icons">close</i>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <!-- form start -->
+            <form id="FormFilter" class="edit-email-item mt-10 mb-10">
+                <div class="input-field">
+                    @Html.TextBoxFor(m => m.Company_Name, new { @id = "ClientFilter" })
+                    <label>Supplier Name</label>
+                </div>
+                <div class="input-field">
+                    @Html.DropDownListFor(m => m.Client_Id, new SelectList(Model.ClientList, "Value", "Text"), "Company Name", new { @class = "select2 browser-default" })
+                    <label>Supplier</label>
+                </div>
+                <div class="input-field">
+                    @Html.TextBoxFor(m => m.Invoice_No)
+                    <label>PO No</label>
+                </div>
+
+                <div class="row input-field ">
+                    <div class="col m6 s12">
+                        <label>From Date</label>
+                        @Html.TextBoxFor(m => m.Date, new { @class = "datepicker" })
+                    </div>
+                    <div class="col m6 s12">
+                        <div>
+                            <label>To Date</label>
+                            @Html.TextBoxFor(m => m.To_Date, new { @class = "datepicker" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row input-field ">
+                    <div class="col m6 s12">
+                        <label>Due Date From</label>
+                        @Html.TextBoxFor(m => m.Due_From_Date, new { @class = "datepicker" })
+                    </div>
+                    <div class="col m6 s12">
+                        <div>
+                            <label>Due Date TO</label>
+                            @Html.TextBoxFor(m => m.Due_To_Date, new { @class = "datepicker" })
+                        </div>
+                    </div>
+                </div>
+                <div class="input-field">
+                    <select id="Tax1" class="invoice-tax browser-default" name="Status">
+                        <option value="" selected disabled>Payment Mode</option>
+                        <option value="Open">Open</option>
+                        <option value="Converted">Converted</option>
+                        <option value="Expired">Expired</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+
+                </div>
+                <div class="input-field">
+                    @Html.DropDownListFor(m => m.Invoice_Item_Id, new SelectList(Model.ItemList, "Value", "Text"), "Item Name", new { @class = "select2 browser-default" })
+                    <label>Supplier</label>
+                </div>
+
+                <div class="card-action pl-0 pr-0 right-align">
+                    <button type="reset" class="btn-small waves-effect waves-light cancel-email-item mr-1">
+                        <i class="material-icons left">close</i>
+                        <span>Cancel</span>
+                    </button>
+                    <button type="button" class="btn-small waves-effect waves-light cyan send-item" data-value="0" id="Shortfilter-invoice">
+                        <i class="material-icons left">filter_list</i>
+                        <span>Search</span>
+                    </button>
+                </div>
+                @Html.HiddenFor(m => m.Page_No, new { @id = "hid-page-no" })
+            </form>
+            <!-- form start end-->
+        </div>
+    </div>
+</div>
+
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <div id="dialog">
+
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="invoice-id" value="@Request.QueryString["Invoiceid"]" />
+
+@section footercontent{
+
+    <script src="../../../app-assets/js/scripts/advance-ui-modals.js"></script>
+    <script src="../../../app-assets/js/scripts/form-select2.js"></script>
+    <script src="../app-assets/js/Invoice.js"></script>
+
+    <script>
+
+        if ($(".modal").length > 0) {
+            var ps_sidebar_compose = new PerfectScrollbar(".modal", {
+                theme: "dark",
+                wheelPropagation: false
+            });
+        }
+
+        $(document).ready(function () {
+
+            GetActionButtons();
+        });
+
+
+        $(document).on('click', '#invoice-email', function () {
+
+            $('#modal1').modal('open');
+            var id = $("#invoice-id").val();
+
+            $.ajax({
+                url: "/Invoice/EmailInvoice",
+                type: "Get",
+                data: { id: id },
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                beforeSend: function () {
+                    $("#loading").removeClass("hide");
+                },
+                complete: function () {
+                    $("#loading").addClass("hide");
+                },
+                success: function (response) {
+
+                    $('#dialog').empty();
+                    $('#dialog').html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+    </script>
+
+}

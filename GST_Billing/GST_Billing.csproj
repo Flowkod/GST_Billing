@@ -49,6 +49,19 @@
       <HintPath>..\..\CORONA_SP_LM\CORONA_SP_LM\bin\ClosedXML.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="ReportViewerForMvc, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReportViewerForMvc.1.1.1\lib\net45\ReportViewerForMvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -408,10 +421,13 @@
     <Content Include="app-assets\js\custom\custom-script.js" />
     <Content Include="app-assets\js\custom\custom-script.min.js" />
     <Content Include="app-assets\js\GstBillCustom.js" />
+    <Content Include="app-assets\js\Invoice.js" />
     <Content Include="app-assets\js\materialize.js" />
     <Content Include="app-assets\js\materialize.min.js" />
     <Content Include="app-assets\js\plugins.js" />
     <Content Include="app-assets\js\plugins.min.js" />
+    <Content Include="app-assets\js\Purchaseorder.js" />
+    <Content Include="app-assets\js\Quotation.js" />
     <Content Include="app-assets\js\scripts\advance-ui-carousel.js" />
     <Content Include="app-assets\js\scripts\advance-ui-carousel.min.js" />
     <Content Include="app-assets\js\scripts\advance-ui-collapsibles.js" />
@@ -1463,8 +1479,71 @@
     <Content Include="app-assets\vendors\waypoints\jquery.waypoints.min.js" />
     <Content Include="app-assets\vendors\waypoints\noframework.waypoints.min.js" />
     <Content Include="app-assets\vendors\waypoints\zepto.waypoints.min.js" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Document\Print.aspx" />
+    <Content Include="PurchaseReport\ReportView.aspx" />
+    <Content Include="ReportViewerWebForm.aspx" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\datarestrict .js" />
+    <Content Include="Dataset\Purchaseorder.xsc">
+      <DependentUpon>Purchaseorder.xsd</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Dataset\Invoice.xsc">
+      <DependentUpon>Invoice.xsd</DependentUpon>
+    </Content>
+    <None Include="Dataset\Invoice.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Invoice.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Dataset\Invoice.xss">
+      <DependentUpon>Invoice.xsd</DependentUpon>
+    </Content>
+    <None Include="Dataset\Purchaseorder.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Purchaseorder.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Dataset\Purchaseorder.xss">
+      <DependentUpon>Purchaseorder.xsd</DependentUpon>
+    </Content>
+    <Content Include="Dataset\Quotation.xsc">
+      <DependentUpon>Quotation.xsd</DependentUpon>
+    </Content>
+    <Content Include="Dataset\PurchaseReport.xsc">
+      <DependentUpon>PurchaseReport.xsd</DependentUpon>
+    </Content>
+    <None Include="Dataset\PurchaseReport.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>PurchaseReport.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Dataset\PurchaseReport.xss">
+      <DependentUpon>PurchaseReport.xsd</DependentUpon>
+    </Content>
+    <None Include="Dataset\Quotation.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Quotation.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Dataset\Quotation.xss">
+      <DependentUpon>Quotation.xsd</DependentUpon>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.8.0.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.0.js" />
@@ -1481,22 +1560,69 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
+    <Compile Include="Controllers\PreferencesController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
+    <Compile Include="Controllers\PurchaseReportController.cs" />
+    <Compile Include="Controllers\QuotationController.cs" />
+    <Compile Include="Dataset\Invoice.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Invoice.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Dataset\Purchaseorder.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Purchaseorder.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Dataset\PurchaseReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Dataset\Quotation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Quotation.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ClientManagement.cs" />
     <Compile Include="Models\CommonMethod.cs" />
     <Compile Include="Models\CompanyDetailsManagement.cs" />
+    <Compile Include="Models\ComposeEmail.cs" />
     <Compile Include="Models\ExpensesManagement.cs" />
+    <Compile Include="Models\InvoiceManagement.cs" />
+    <Compile Include="Models\InvoiceProductManagement.cs" />
     <Compile Include="Models\ItemManagement.cs" />
     <Compile Include="Models\ItemTaxesManagement.cs" />
     <Compile Include="Models\ItemUnitManagement.cs" />
+    <Compile Include="Models\NoInWord.cs" />
+    <Compile Include="Models\PreferencesManagment.cs" />
     <Compile Include="Models\PurchaseOrderManagement.cs" />
+    <Compile Include="Models\PurchaseOrderProductManagement.cs" />
+    <Compile Include="Models\PurchaseReportManagement.cs" />
+    <Compile Include="Models\QuotationManagement.cs" />
+    <Compile Include="Models\QuotationProductManagement.cs" />
     <Compile Include="Models\SupplierManagement.cs" />
     <Compile Include="Models\UserManagement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Document\Print.aspx.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Document\Print.aspx.designer.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PurchaseReport\ReportView.aspx.cs">
+      <DependentUpon>ReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PurchaseReport\ReportView.aspx.designer.cs">
+      <DependentUpon>ReportView.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -1595,10 +1721,39 @@
     <Content Include="Views\Master\Employee.cshtml" />
     <Content Include="Views\Master\EmployeeDataTable.cshtml" />
     <Content Include="Views\Account\Userprofile.cshtml" />
-    <Content Include="Views\Purchase\Purchaseorder.cshtml" />
+    <Content Include="Views\Purchase\AddPurchaseorder.cshtml" />
     <Content Include="Views\Account\CompanyProfile.cshtml" />
-    <Content Include="Views\Purchase\Addnewentry.cshtml" />
-    <Content Include="Views\Purchase\GetClientShipAddress.cshtml" />
+    <Content Include="Views\Master\GetClientShipAddress.cshtml" />
+    <Content Include="Views\Purchase\PurchaseItemList.cshtml" />
+    <Content Include="Views\Purchase\Purchaseorder.cshtml" />
+    <Content Include="Views\Purchase\GetItemsForUpdate.cshtml" />
+    <Content Include="Views\Purchase\PurchaseDataTable.cshtml" />
+    <Content Include="Views\Purchase\Purchaseview.cshtml" />
+    <Content Include="Views\Preferences\Setting.cshtml" />
+    <Content Include="Views\Preferences\PurchaseOrderPreferences.cshtml" />
+    <Content Include="Views\Purchase\ShortDataTable.cshtml" />
+    <Content Include="Views\Quotation\AddQuotation.cshtml" />
+    <Content Include="Views\Quotation\QuotationItemList.cshtml" />
+    <Content Include="Views\Master\QuickAddEntry.cshtml" />
+    <Content Include="Views\Quotation\Quotation.cshtml" />
+    <Content Include="Views\Quotation\QuotationDataTable.cshtml" />
+    <Content Include="Views\Quotation\GetItemsForUpdate.cshtml" />
+    <Content Include="Views\Quotation\Quotationview.cshtml" />
+    <Content Include="Views\Quotation\ShortDataTable.cshtml" />
+    <Content Include="Views\Invoice\Invoice.cshtml" />
+    <Content Include="Views\Invoice\InvoiceDataTable.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Invoice\AddInvoice.cshtml" />
+    <Content Include="Views\Invoice\InvoiceItemList.cshtml" />
+    <Content Include="Views\Invoice\GetItemsForUpdate.cshtml" />
+    <Content Include="Views\Invoice\Invoiceview.cshtml" />
+    <Content Include="Views\Invoice\ShortDataTable.cshtml" />
+    <Content Include="Views\Invoice\EmailInvoice.cshtml" />
+    <Content Include="Views\PurchaseReport\ItemWise.cshtml" />
+    <Content Include="Views\PurchaseReport\Reports.cshtml" />
+    <Content Include="Views\PurchaseReport\ReportView.cshtml" />
+    <Content Include="Views\PurchaseReport\SupplierWise.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1613,6 +1768,13 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Document\PurchaseOrder.rdlc" />
+    <EmbeddedResource Include="Document\Quotation.rdlc" />
+    <EmbeddedResource Include="Document\Invoice.rdlc" />
+    <EmbeddedResource Include="PurchaseReport\ItemWise.rdlc" />
+    <EmbeddedResource Include="PurchaseReport\SupplierWise.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

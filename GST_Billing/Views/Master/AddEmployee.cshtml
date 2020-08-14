@@ -1,6 +1,6 @@
 ﻿@model GST_Billing.Models.UserManagement
 @{
-    ViewBag.Title = "AddEmployee";
+    ViewBag.Title = "Employee";
     Layout = "~/Views/Shared/_LayoutPage1.cshtml";
 }
 <link rel="stylesheet" type="text/css" href="../../app-assets/css/pages/page-users.css">
@@ -68,7 +68,7 @@
 
                                                     <div class="col s12 input-field">
                                                         @Html.TextBoxFor(m => m.Email, new { @class = "validate m-0" })
-                                                        <label for="name">Email Id</label>
+                                                        <label for="name">Email Id <span>(This is login id of user)</span> </label>
                                                         <div class="error">
                                                             @Html.ValidationMessageFor(m => m.Email, "")
                                                         </div>

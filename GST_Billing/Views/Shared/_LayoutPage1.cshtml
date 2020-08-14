@@ -217,40 +217,40 @@ License: You must have a valid license purchased only from themeforest(the above
                         <li class="@(ViewBag.Title == "Expenses" ? "active" : "")">
                             <a class="@(ViewBag.Title == "Expenses" ? "active" : "")" href="../Master/ExpensesType"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Expenses">Expenses Type</span></a>
                         </li>
-                        <li class="@(ViewBag.Title == "Employee" ? "active" : "")">
+                        @*<li class="@(ViewBag.Title == "Employee" ? "active" : "")">
                             <a class="@(ViewBag.Title == "Employee" ? "active" : "")" href="../Master/Employee"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Employee">Employee</span></a>
-                        </li>
+                        </li>*@
                         <li>
                             <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Payment">Payment</span></a>
                         </li>
                     </ul>
                 </div>
             </li>
-            <li class="bold">
+            <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Purchase" ? "active bold open" : "bold")">
                 <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)"><i class="material-icons">add_shopping_cart</i><span class="menu-title" data-i18n="eCommerce">Purchase</span></a>
                 <div class="collapsible-body">
                     <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-                        <li>
-                            <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Products Page">Purchase Order</span></a>
+                        <li class="@(ViewBag.Title == "Purchaseorder" ? "active" : "")">
+                            <a class="@(ViewBag.Title == "Purchaseorder" ? "active" : "")" href="../Purchase/Purchaseorder"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Products Page">Purchase Order</span></a>
                         </li>
                         <li>
-                            <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Pricing">Purchase Order Return</span></a>
+                            <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Pricing">PO Return </span><span class="badge badge pill purple float-right mr-10">Upcoming</span> </a>
                         </li>
                         <li>
-                            <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Pricing">Manage Stock</span></a>
+                            <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Pricing">Manage Stock</span><span class="badge badge pill purple float-right mr-10">Upcoming</span></a>
                         </li>
                     </ul>
                 </div>
             </li>
             <li class="bold">
-                <a class="waves-effect waves-cyan " href="JavaScript:void(0)"><i class="material-icons">content_paste</i><span class="menu-title" data-i18n="eCommerce">Quotation</span></a>
+                <a class="@(ViewBag.Title == "Quotation" ? "active waves-effect waves-cyan" : "waves-effect waves-cyan")"  href="../Quotation/Quotation"><i class="material-icons">content_paste</i><span class="menu-title" data-i18n="eCommerce">Quotes / Proforma Inv.</span></a>
             </li>
-            <li class="bold">
+            <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Invoice" ? "active bold open" : "bold")">
                 <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)"><i class="material-icons">receipt</i><span class="menu-title" data-i18n="eCommerce">Sale</span></a>
                 <div class="collapsible-body">
                     <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-                        <li>
-                            <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Products Page">Invoice</span></a>
+                        <li class="@(ViewBag.Title == "Invoice" ? "active" : "")">
+                            <a class="@(ViewBag.Title == "Invoice" ? "active" : "")" href="../Invoice/Invoice"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Products Page">Invoice</span></a>
                         </li>
                         <li>
                             <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Pricing">Credit Note</span></a>
@@ -277,19 +277,16 @@ License: You must have a valid license purchased only from themeforest(the above
             <li class="navigation-header">
                 <a class="navigation-header-text orange-text">Report </a><i class="navigation-header-icon material-icons">more_horiz</i>
             </li>
-            <li class="bold">
+            <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "PurchaseReport" ? "active bold open" : "bold")">
                 <a class="collapsible-header waves-effect waves-cyan " href="JavaScript:void(0)"><i class="material-icons">add_shopping_cart</i><span class="menu-title" data-i18n="Expenses">Purchase Report</span></a>
                 <div class="collapsible-body">
                     <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-                        <li>
-                            <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Products Page">Item Wise Purchase</span></a>
+                        <li class="@(ViewBag.Title == "ItemWise" ? "active" : "")">
+                            <a class="@(ViewBag.Title == "ItemWise" ? "active" : "")" href="../PurchaseReport/ItemWise"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Products Page">Item Wise Purchase</span></a>
                         </li>
                         <li>
                             <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Pricing">Supplier Wise Purchase</span></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Pricing">Monthly Purchase</span></a>
-                        </li>
+                        </li>                       
                         <li>
                             <a href="#"><i class="material-icons">radio_button_unchecked</i><span data-i18n="Pricing">Account Balance</span></a>
                         </li>
@@ -328,10 +325,10 @@ License: You must have a valid license purchased only from themeforest(the above
                 <a class="@(ViewBag.Title == "CompanyProfile" ? "waves-effect waves-cyan active" : "waves-effect waves-cyan")" href="../Account/CompanyProfile"><i class="material-icons">business</i><span class="menu-title" data-i18n="Company Profile">Company Profile</span></a>
             </li>
             <li class="bold">
-                <a class="waves-effect waves-cyan " href="JavaScript:void(0)"><i class="material-icons">lock_open</i><span class="menu-title" data-i18n="Permission/User management">Permission/User management</span></a>
+                <a class="@(ViewBag.Title == "Employee" ? "waves-effect waves-cyan active" : "waves-effect waves-cyan")" href="../Master/Employee"><i class="material-icons">lock_open</i><span class="menu-title" data-i18n="Permission/User management">Permission/User management</span></a>
             </li>
             <li class="bold">
-                <a class="waves-effect waves-cyan " href="JavaScript:void(0)"><i class="material-icons">format_list_bulleted</i><span class="menu-title" data-i18n="Preferences">Preferences</span></a>
+                <a class="@(ViewBag.Title == "Preferences" ? "waves-effect waves-cyan active" : "waves-effect waves-cyan")" href="../Preferences/Setting"><i class="material-icons">format_list_bulleted</i><span class="menu-title" data-i18n="Preferences">Preferences</span></a>
             </li>
             <li class="bold">
                 <a class="waves-effect waves-cyan " href="JavaScript:void(0)"><i class="material-icons">mail_outline</i><span class="menu-title" data-i18n="SMS/Email">SMS/Email</span></a>

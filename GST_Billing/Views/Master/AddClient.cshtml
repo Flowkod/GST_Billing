@@ -292,7 +292,7 @@
                                         <label for="first_name01">Phone No</label>
                                     </div>
                                     <div class="input-field col m12 s12">
-                                        @Html.TextBoxFor(m => m.Ship_Address,new { @placeholder = "Building no/ street/ near by", @maxlength = "100"})
+                                        @Html.TextBoxFor(m => m.Ship_Address, new { @placeholder = "Building no/ street/ near by", @maxlength = "100" })
                                         <label>Detail Address</label>
                                     </div>
                                     <div class="input-field col m3 s12">
@@ -352,13 +352,15 @@
 @section footercontent
 {
     <script src="~/app-assets/js/GstBillCustom.js"></script>
-    <script>
-    jQuery(document).ready(function ($) {
-        var value = '@TempData["AddedFrom"]';
-        if (value != "") {
 
-            parent.closew();
-        }
+    <script>
+    ///To close window id new record added for purchase order
+    jQuery(document).ready(function ($) {
+    var value = '@TempData["AddedFrom"]';
+    if (value != "") {
+
+    parent.closew();
+    }
     });
     </script>
 }

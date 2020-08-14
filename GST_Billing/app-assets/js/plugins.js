@@ -108,16 +108,16 @@ $(function () {
    $(".tabs").tabs();
 
    // initialize datepicker
-   $('.datepicker').datepicker({
-      autoClose: true,
-      format: 'dd/mm/yyyy',
-      container: 'body',
-      onDraw: function () {
-         // materialize select dropdown not proper working on mobile and tablets so we make it browser default select
-         $('.datepicker-container').find('.datepicker-select').addClass('browser-default');
-         $(".datepicker-container .select-dropdown.dropdown-trigger").remove()
-      }
-   });
+    $('.datepicker').datepicker({
+        autoClose: true,
+        format: 'dd mmm yyyy',
+        container: 'body',
+        onDraw: function () {
+            // materialize select dropdown not proper working on mobile and tablets so we make it browser default select
+            $('.datepicker-container').find('.datepicker-select').addClass('browser-default');
+            $(".datepicker-container .select-dropdown.dropdown-trigger").remove()
+        }
+    });
 
    // Swipeable Tabs Demo Init
    if ($("#tabs-swipe-demo").length) {

@@ -270,13 +270,15 @@
 @section footercontent
 {
     <script src="~/app-assets/js/GstBillCustom.js"></script>
+
     <script>
+    ///To close window id new record added for purchase order
     jQuery(document).ready(function ($) {
-        var value = '@TempData["AddedFrom"]';
-        if (value != "") {
-            
-            parent.closew();
-        }
+    var value = '@TempData["AddedFrom"]';
+    if (value != "") {
+
+    parent.closew();
+    }
     });
     </script>
 }

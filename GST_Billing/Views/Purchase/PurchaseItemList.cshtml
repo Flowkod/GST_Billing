@@ -1,0 +1,337 @@
+﻿@model GST_Billing.Models.PurchaseOrderProductManagement
+
+@if (ViewBag.ActionType == null)
+{
+
+    <div class="form invoice-item-repeater">
+        <div data-repeater-list="group-a">
+            <div class="mb-2" data-repeater-item>
+                <!-- invoice Titles -->
+                <div class="row mb-1">
+                    <div class="col s3 m4">
+                        <h6 class="m-0">Item<span class="pink-text">*</span> </h6>
+                    </div>
+                    <div class="col s3">
+                        <h6 class="m-0">UOM Unit</h6>
+                    </div>
+                    <div class="col s3">
+                        <h6 class="m-0">Qty<span class="pink-text">*</span></h6>
+                    </div>
+                    <div class="col s3 m2">
+                        <h6 class="m-0">Rate<span class="pink-text">*</span></h6>
+                    </div>
+                </div>
+                <div class="invoice-item display-flex mb-1">
+                    <div class="invoice-item-filed row pt-1">
+                        <div class="col s12 m4 input-field">
+                            @Html.DropDownListFor(m => m.Item_Id, new SelectList((List<SelectListItem>)Cache["ItemList"], "Value", "Text"), "Item Name", new { @id = "ItemList", @class = "select2 browser-default" })
+                            <input type="hidden" name="Item_Name" id="Item_NameHid" />
+                            @Html.HiddenFor(m => m.PurchaseOrder_Product_Id)
+                            @Html.HiddenFor(m => m.Purchase_Order_Id, new { @Value=@Model.Purchase_Order_Id})
+                        </div>
+                        <div class="col m3 s12 input-field">
+                            @Html.DropDownListFor(m => m.UOM_Unit, new SelectList((List<SelectListItem>)Cache["ItemUnitList"], "Value", "Text"), "Item Unit", new { @id = "ItemUnitList", @class = "select2 browser-default" })
+                            <input type="hidden" name="Unit_Name" id="Item_Unit_NameHid" />
+                        </div>
+                        <div class="col m3 s12 input-field">
+                            <input name="Quantity" id="Qty" type="number">
+                        </div>
+                        <div class="col m2 s12 input-field">
+                            <input name="Rate" id="Rate" type="number">
+                        </div>
+
+                        <div class="col m4 s12 input-field">
+                            <textarea name="Item_Note" id="Note" class="materialize-textarea" placeholder="Note"></textarea>
+                        </div>
+                        <div class="col m2 s12 input-field">
+                            <input name="HSN_SAC" id="HSN_SAC" type="text" placeholder="HSN/SAC">                           
+                                <input name="Batch_No" id="Batch_No" type="text" placeholder="Batch_No">
+                        </div>
+                        <div class="col m4 s12 input-field row">
+                            <div class="col m4">
+                                <span>Dis. </span> <br />
+                                <span id="DiscountSpan" class="discount-value mr-1">0%</span>
+                                <input type="hidden" name="Discount_Percentage" id="DiscountHid" />
+                            </div>
+                            <div class="col m4">
+                                <span>CGST </span> <br />
+                                <span id="CGSTSpan" class="discount-value mr-1">0%</span>
+                                <input type="hidden" name="CGST" id="CGSTHid" />
+                            </div>
+                            <div class="col m4">
+                                <span>SGST </span> <br />
+                                <span id="SGSTSpan" class="discount-value mr-1">0%</span>
+                                <input type="hidden" name="SGST" id="SGSTHid" />
+                            </div>
+                        </div>
+                        <div class="col m2 s12 input-field right-align">
+                            <span id="TotalSpan" class="green-text strong">Total:<br />   </span>
+                            <input type="hidden" name="Total" id="TotalHid" />
+                        </div>
+                    </div>
+                    <div class="invoice-icon display-flex flex-column justify-content-between">
+                        <span data-repeater-delete class="delete-row-btn">
+
+                        </span>
+                        <div class="dropdown">
+                            <i class="material-icons dropdown-button" data-target="dropdown-discount">brightness_low</i>
+                            <div class="dropdown-content" id="dropdown-discount">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col s12 input-field">
+                                        <label for="discount">Discount(%)</label>
+                                        <input name="Discount" type="number" id="Discount" value="0">
+                                    </div>
+                                    <div class="col s12">
+                                        @Html.DropDownListFor(m => m.Tax, new SelectList((List<SelectListItem>)Cache["TaxList"], "Value", "Text"), "Tax", new { @id = "TaxList", @class = "invoice-tax browser-default" })
+                                    </div>
+
+                                </div>
+                                <div class="display-flex justify-content-between mt-4">
+                                    <button type="button" class="btn invoice-apply-btn">
+                                        <span>Apply</span>
+                                    </button>
+                                    <button type="button" class="btn invoice-cancel-btn ml-1 indigo">
+                                        <span>Cancel</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hide" id="poitemvalidate">
+            <span class="pink-text">Item name, Quantity, rate required ..!</span>
+        </div>
+        <div class="input-field">
+            <input type="hidden" name="action_type" value="Add" />
+            <button class="btn invoice-repeat-btn" data-repeater-create type="button" id="AddNewItem-row">
+                <i class="material-icons left">add</i>
+                <span>Add Item</span>
+            </button>
+        </div>
+    </div>
+}
+else if (ViewBag.ActionType == "Add")
+{
+    <tr>
+        <td>
+            @Model.Item_Name
+            @Html.HiddenFor(m => m.Item_Id)
+            @Html.HiddenFor(m => m.Item_Name)
+            @Html.HiddenFor(m => m.PurchaseOrder_Product_Id)
+            @Html.HiddenFor(m => m.Purchase_Order_Id)
+        </td>
+        <td>
+            @Model.Unit_Name
+            @Html.HiddenFor(m => m.Unit_Name)
+            @Html.HiddenFor(m => m.UOM_Unit)
+            @Html.HiddenFor(m => m.HSN_SAC)
+            @Html.HiddenFor(m => m.Batch_No)
+            @Html.HiddenFor(m => m.Item_Note)
+        </td>
+        <td>
+            @Model.Quantity
+            @Html.HiddenFor(m => m.Quantity)
+        </td>
+        <td>
+            @Model.Rate
+            @Html.HiddenFor(m => m.Rate)
+        </td>
+        <td>
+            @Model.Discount_Percentage%
+            @Html.HiddenFor(m => m.Discount_Percentage)
+        </td>
+        <td>
+            @Model.CGST%
+            @Html.HiddenFor(m => m.CGST)
+        </td>
+        <td>
+            @Model.SGST%
+            @Html.HiddenFor(m => m.SGST)
+            @Html.HiddenFor(m => m.Tax)
+        </td>
+        <td>
+            <strong class="black-text"> @Model.Total</strong>
+            @Html.HiddenFor(m => m.Total)
+        </td>
+        <td class="p-0">
+            <input type="hidden" name="action_type" value="Edit" />
+            <span data-repeater-delete class="delete-row-btn cyan-text" id="edit-row">
+                <i class="material-icons">edit</i>
+            </span>
+            <span type="button" data-repeater-delete class="delete-row-btn red-text" id="delete-row">
+                <i class="material-icons">clear</i>
+            </span>
+        </td>
+    </tr>
+}
+else if (ViewBag.ActionType == "Edit")
+{
+    <td colspan="9" style="background-color:white;">
+        <div class="form invoice-item-repeater">
+            <div data-repeater-list="group-a">
+                <div class="mb-2" data-repeater-item>
+                    <!-- invoice Titles -->
+                    <div class="row mb-1">
+                        <div class="col s3 m4">
+                            <h6 class="m-0">Item<span class="pink-text">*</span> </h6>
+                        </div>
+                        <div class="col s3">
+                            <h6 class="m-0">UOM Unit</h6>
+                        </div>
+                        <div class="col s3">
+                            <h6 class="m-0">Qty<span class="pink-text">*</span></h6>
+                        </div>
+                        <div class="col s3 m2">
+                            <h6 class="m-0">Rate<span class="pink-text">*</span></h6>
+                        </div>
+                    </div>
+                    <div class="invoice-item display-flex mb-1">
+                        <div class="invoice-item-filed row pt-1">
+                            <div class="col s12 m4 input-field">
+                                @Html.DropDownListFor(m => m.Item_Id, new SelectList((List<SelectListItem>)Cache["ItemList"], "Value", "Text"), "Item Name", new { @id = "ItemList", @class = "select2 browser-default" })
+                                <input type="hidden" name="Item_Name" id="Item_NameHid" value="@Model.Item_Name" />
+                                @Html.HiddenFor(m => m.PurchaseOrder_Product_Id)
+                                @Html.HiddenFor(m => m.Purchase_Order_Id)
+                            </div>
+                            <div class="col m3 s12 input-field">
+                                @Html.DropDownListFor(m => m.UOM_Unit, new SelectList((List<SelectListItem>)Cache["ItemUnitList"], "Value", "Text"), "Item Unit", new { @id = "ItemUnitList", @class = "select2 browser-default" })
+                                <input type="hidden" name="Unit_Name" id="Item_Unit_NameHid" value="@Model.Unit_Name" />
+                            </div>
+                            <div class="col m3 s12 input-field">
+                                <input name="Quantity" id="Qty" type="number" value="@Model.Quantity">
+                            </div>
+                            <div class="col m2 s12 input-field">
+                                <input name="Rate" id="Rate" type="number" value="@Model.Rate">
+                            </div>
+
+                            <div class="col m4 s12 input-field">
+                                <textarea name="Item_Note" id="Note" class="materialize-textarea" placeholder="Note">@Model.Item_Note</textarea>
+                            </div>
+                            <div class="col m2 s12 input-field">
+                                <input name="HSN_SAC" id="HSN_SAC" type="text" placeholder="HSN/SAC" value="@Model.HSN_SAC">
+                                @if (Model.PurchaseOrder_Product_Id!=0)
+                                {
+                                    <input name="Batch_No" id="Batch_No" type="text" placeholder="Batch_No" value="@Model.Batch_No">
+                                }
+                                </div>
+                            <div class="col m4 s12 input-field row">
+                                <div class="col m4">
+                                    <span>Dis. </span> <br />
+                                    <span id="DiscountSpan" class="discount-value mr-1">@Model.Discount_Percentage%</span>
+                                    <input type="hidden" name="Discount_Percentage" id="DiscountHid" value="@Model.Discount_Percentage" />
+                                </div>
+                                <div class="col m4">
+                                    <span>CGST </span> <br />
+                                    <span id="CGSTSpan" class="discount-value mr-1">@Model.CGST%</span>
+                                    <input type="hidden" name="CGST" id="CGSTHid" value="@Model.CGST" />
+                                </div>
+                                <div class="col m4">
+                                    <span>SGST </span> <br />
+                                    <span id="SGSTSpan" class="discount-value mr-1">@Model.SGST%</span>
+                                    <input type="hidden" name="SGST" id="SGSTHid" value="@Model.SGST" />
+                                </div>
+                            </div>
+                            <div class="col m2 s12 input-field right-align">
+                                <span id="TotalSpan" class="green-text strong">Total:<br /> @Model.Total  </span>
+                                <input type="hidden" name="Total" id="TotalHid" value="@Model.Total" />
+                            </div>
+                        </div>
+                        <div class="invoice-icon display-flex flex-column justify-content-between">
+                            <span data-repeater-delete class="delete-row-btn">
+
+                            </span>
+                            <div class="dropdown">
+                                <i class="material-icons dropdown-button" data-target="dropdown-discount">brightness_low</i>
+                                <div class="dropdown-content" id="dropdown-discount">
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col s12 input-field">
+                                            <label for="discount">Discount(%)</label>
+                                            <input name="Discount" type="number" id="Discount" value="@Model.Discount_Percentage">
+                                        </div>
+                                        <div class="col s12">
+                                            @Html.DropDownListFor(m => m.Tax, new SelectList((List<SelectListItem>)Cache["TaxList"], "Value", "Text"), "Tax", new { @id = "TaxList", @class = "invoice-tax browser-default" })
+                                        </div>
+
+                                    </div>
+                                    <div class="display-flex justify-content-between mt-4">
+                                        <button type="button" class="btn invoice-apply-btn">
+                                            <span>Apply</span>
+                                        </button>
+                                        <button type="button" class="btn invoice-cancel-btn ml-1 indigo">
+                                            <span>Cancel</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hide" id="poitemvalidate">
+                <span class="pink-text">Item name, Quantity, rate required ..!</span>
+            </div>
+            <div class="input-field">
+                <input type="hidden" name="action_type" value="Update" />
+
+                <button class="btn invoice-repeat-btn" data-repeater-create type="button" id="update-row">
+                    <i class="material-icons left">save</i>
+                    <span>Update Item</span>
+                </button>
+            </div>
+        </div>
+    </td>
+}
+else if (ViewBag.ActionType == "Update")
+{
+<td>
+    @Model.Item_Name
+    @Html.HiddenFor(m => m.Item_Id)
+    @Html.HiddenFor(m => m.Item_Name)
+    @Html.HiddenFor(m => m.PurchaseOrder_Product_Id)
+    @Html.HiddenFor(m => m.Purchase_Order_Id)
+</td>
+    <td>
+        @Model.Unit_Name
+        @Html.HiddenFor(m => m.Unit_Name)
+        @Html.HiddenFor(m => m.UOM_Unit)
+        @Html.HiddenFor(m => m.HSN_SAC)
+        @Html.HiddenFor(m => m.Batch_No)
+        @Html.HiddenFor(m => m.Item_Note)
+    </td>
+    <td>
+        @Model.Quantity
+        @Html.HiddenFor(m => m.Quantity)
+    </td>
+    <td>
+        @Model.Rate
+        @Html.HiddenFor(m => m.Rate)
+    </td>
+    <td>
+        @Model.Discount_Percentage%
+        @Html.HiddenFor(m => m.Discount_Percentage)
+    </td>
+    <td>
+        @Model.CGST%
+        @Html.HiddenFor(m => m.CGST)
+    </td>
+    <td>
+        @Model.SGST%
+        @Html.HiddenFor(m => m.SGST)
+        @Html.HiddenFor(m => m.Tax)
+    </td>
+    <td>
+        <strong class="black-text"> @Model.Total</strong>
+        @Html.HiddenFor(m => m.Total)
+    </td>
+    <td class="p-0">
+        <input type="hidden" name="action_type" value="Edit" />
+        <span data-repeater-delete class="delete-row-btn cyan-text" id="edit-row">
+            <i class="material-icons">edit</i>
+        </span>
+        <span type="button" data-repeater-delete class="delete-row-btn red-text" id="delete-row">
+            <i class="material-icons">clear</i>
+        </span>
+    </td>
+}

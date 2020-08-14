@@ -9,3 +9,18 @@ NOTE:
 ------
 PLACE HERE YOUR OWN CSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+
+[type=checkbox] + span:not(.lever):before, [type=checkbox]:not(.filled-in) + span:not(.lever):after {
+	border: solid 2px #ddd;
+}
+
+#dialog-data-table {
+	background-color: white;
+}
+
+iframe {
+	border: none;
+	width: 100% !important;
+	height: 300px !important;
+}

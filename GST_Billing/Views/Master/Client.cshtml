@@ -27,8 +27,6 @@
 <!-- BEGIN: Page Main-->
 <!-- invoice list -->
 <section class="invoice-list-wrapper section mb-10">
-
-
     <div class="responsive-table">
         <div class="top display-flex  mb-2">
             <div class="action-filters">
@@ -62,7 +60,7 @@
                         @Html.HiddenFor(m => m.City)
                         @Html.HiddenFor(m => m.State)
                         <button type="submit" class="btn waves-effect waves-light border-round z-depth-4">
-                            <i class="material-icons">file_download</i> <span>Export To Excel</span>
+                            <i class="material-icons">file_download</i> <span class="hide-on-small-only">Export To Excel</span>
                         </button>
                     }
 

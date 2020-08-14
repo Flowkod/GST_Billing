@@ -4,56 +4,58 @@
         <div class="result-count pl-1">
             <p>About @Model.dt1.Rows[0]["Total_Records"] result found...</p>
         </div>
-        <table id="example" class="table invoice-data-table white border-radius-4 pt-1">
-            <thead>
-                <tr>
-                    <th class="pl-1">
-                        <span>#</span>
-                    </th>
-                    <th>Type</th>
-                    <th class="center-align">Created On</th>
-                    <th class="center-align">Created By</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.dt.Rows.Count; i++)
-                {
+        <div style="overflow:auto;">
+            <table id="example" class="table invoice-data-table white border-radius-4 pt-1">
+                <thead>
                     <tr>
-                        <td class="pl-1">
-                            @Convert.ToString(Model.dt.Rows[i]["SrNo"])
-                        </td>
-
-                        <td>
-                            <span>@Convert.ToString(Model.dt.Rows[i]["Type"])</span>
-                        </td>
-                        <td class="center-align">
-                            <span>@Convert.ToDateTime(Model.dt.Rows[i]["Created_On"]).ToString("dd MMM yyyy hh:mm tt")</span>
-                        </td>
-                        <td class="center-align">
-                            <span>@Convert.ToString(Model.dt.Rows[i]["Name"])</span>
-                        </td>
-
-                        <td>
-                            <div class="invoice-action">
-                                <a href="../Master/DeleteExpensesType?etypeid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-view mr-4 ">
-                                    <i class="material-icons red-text">clear</i>
-                                </a>
-                                <a href="../Master/ExpensesType?etypeid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-edit">
-                                    <i class="material-icons cyan-text">edit</i>
-                                </a>
-                            </div>
-                        </td>
+                        <th class="pl-1">
+                            <span>#</span>
+                        </th>
+                        <th>Type</th>
+                        <th class="center-align">Created On</th>
+                        <th class="center-align">Created By</th>
+                        <th>Action</th>
                     </tr>
-                }
-                @if (Model.dt.Rows.Count == 0)
-                {
-                    <tr>
-                        <td colspan="5">No record found...</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.dt.Rows.Count; i++)
+                    {
+                        <tr>
+                            <td class="pl-1">
+                                @Convert.ToString(Model.dt.Rows[i]["SrNo"])
+                            </td>
+
+                            <td>
+                                <span>@Convert.ToString(Model.dt.Rows[i]["Type"])</span>
+                            </td>
+                            <td class="center-align">
+                                <span>@Convert.ToDateTime(Model.dt.Rows[i]["Created_On"]).ToString("dd MMM yyyy hh:mm tt")</span>
+                            </td>
+                            <td class="center-align">
+                                <span>@Convert.ToString(Model.dt.Rows[i]["Name"])</span>
+                            </td>
+
+                            <td>
+                                <div class="invoice-action">
+                                    <a href="../Master/DeleteExpensesType?etypeid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-view mr-4 ">
+                                        <i class="material-icons red-text">clear</i>
+                                    </a>
+                                    <a href="../Master/ExpensesType?etypeid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-edit">
+                                        <i class="material-icons cyan-text">edit</i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (Model.dt.Rows.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="5">No record found...</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
     <div id="example_wrapper" class="dataTables_wrapper no-footer">
         <div class="bottom">

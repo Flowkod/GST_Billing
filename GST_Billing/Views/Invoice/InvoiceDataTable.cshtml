@@ -1,0 +1,112 @@
+﻿
+@model GST_Billing.Models.InvoiceManagement
+
+<div class="result-count pl-1 white-text">
+    <p>About @Model.dt1.Rows[0]["Total_Records"] result found...</p>
+</div>
+<div style="overflow:auto;">
+    <table id="example" class="table invoice-data-table white border-radius-4 pt-1">
+        <thead>
+            <tr>
+                <th class="pl-1">
+                    <span>#</span>
+                </th>
+                <th>Date</th>
+                <th>Company Name</th>
+                <th class="green-text right-align">Gross Total</th>
+                <th class="center-align">Payment Mode</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.dt.Rows.Count; i++)
+            {
+                <tr>
+
+                    <td class="pl-1">
+                        @Convert.ToString(Model.dt.Rows[i]["SrNo"])
+                    </td>
+                    <td>
+                        @Convert.ToDateTime(Model.dt.Rows[i]["Date"]).ToString("dd MMM yyyy")
+                    </td>
+                    <td> @Convert.ToString(Model.dt.Rows[i]["Company_Name"])</td>
+                  
+                    <td class="green-text right-align">
+                        @Convert.ToString(Model.dt.Rows[i]["Gross_Total"])Rs.
+                    </td>
+                    <td class="center-align">
+                        @if (Convert.ToString(Model.dt.Rows[i]["Status"]) == "Open")
+                        {
+                            <span class="cyan-text">@Convert.ToString(Model.dt.Rows[i]["Status"])</span>
+                        }
+                        else if (Convert.ToString(Model.dt.Rows[i]["Status"]) == "Expired")
+                        {
+                            <span class="red-text">@Convert.ToString(Model.dt.Rows[i]["Status"])</span>
+                        }
+                        else if (Convert.ToString(Model.dt.Rows[i]["Status"]) == "Cancelled")
+                        {
+                            <span class="pink-text">@Convert.ToString(Model.dt.Rows[i]["Status"])</span>
+                        }
+                        else if (Convert.ToString(Model.dt.Rows[i]["Status"]) == "Converted")
+                        {
+                            <span class="green-text">@Convert.ToString(Model.dt.Rows[i]["Status"])</span>
+                        }
+
+                    </td>
+
+                    <td>
+                        <div class="invoice-action">
+                            <a href="../Invoice/Invoiceview?Invoiceid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-view mr-4 ">
+                                <i class="material-icons green-text">remove_red_eye</i>
+                            </a>
+                            <a href="../Invoice/DeleteInvoice?Invoiceid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-view mr-4 ">
+                                <i class="material-icons red-text">clear</i>
+                            </a>
+                           
+                                <a href="../Invoice/AddInvoice?Invoiceid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-edit">
+                                    <i class="material-icons cyan-text">edit</i>
+                                </a>
+                            
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div id="example_wrapper" class="dataTables_wrapper no-footer">
+    <div class="bottom">
+        <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+
+            @if (Model.Page_No <= 1)
+            {
+                <a class="paginate_button previous disabled" aria-controls="example" data-dt-idx="0" tabindex="-1" id="example_previous">Previous</a>
+            }
+            else
+            {
+                <a class="paginate_button previous" id="filter-invoice" aria-controls="example" data-value="@(Model.Page_No-1)" data-dt-idx="0" tabindex="-1">Previous</a>
+            }
+
+            @for (int i = 0; i < Convert.ToInt32(Model.dt1.Rows[0]["Total_Page"]); i++)
+            {
+                if (Model.Page_No == (i + 1))
+                {
+                    <span><a class="paginate_button current" aria-controls="example" data-dt-idx="1" data-value="@(i+1)" tabindex="@(i+1)">@(i + 1)</a></span>
+                }
+                else
+                {
+                    <span><a class="paginate_button" id="filter-invoice" aria-controls="example" data-dt-idx="1" data-value="@(i+1)" tabindex="@(i+1)">@(i + 1)</a></span>
+                }
+            }
+
+            @if (Model.Page_No >= Convert.ToInt32(Model.dt1.Rows[0]["Total_Page"]))
+            {
+                <a class="paginate_button next disabled" aria-controls="example" data-dt-idx="2" tabindex="-1" id="example_next">Next</a>
+            }
+            else
+            {
+                <a class="paginate_button next" aria-controls="example" data-dt-idx="2" tabindex="-1" data-value="@(Model.Page_No+1)" id="filter-invoice">Next</a>
+            }
+        </div>
+    </div>
+</div>

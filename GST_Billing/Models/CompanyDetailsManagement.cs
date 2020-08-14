@@ -19,7 +19,7 @@ namespace GST_Billing.Models
 
 		public int Company_Id { get; set; }
 		public string Company_Name { get; set; }
-		public string Conatact_Person { get; set; }
+		public string Contact_Person { get; set; }
 		public string Email { get; set; }
 		public string Mobile_No { get; set; }
 		public string GSTIN { get; set; }
@@ -47,10 +47,10 @@ namespace GST_Billing.Models
             else
                 Command.Parameters.Add(new SqlParameter("@Company_Name", SqlDbType.VarChar)).Value = DBNull.Value;
 
-            if (Conatact_Person != string.Empty && Conatact_Person != null)
-                Command.Parameters.Add(new SqlParameter("@Conatact_Person", SqlDbType.VarChar)).Value = Conatact_Person;
+            if (Contact_Person != string.Empty && Contact_Person != null)
+                Command.Parameters.Add(new SqlParameter("@Contact_Person", SqlDbType.VarChar)).Value = Contact_Person;
             else
-                Command.Parameters.Add(new SqlParameter("@Conatact_Person", SqlDbType.VarChar)).Value = DBNull.Value;
+                Command.Parameters.Add(new SqlParameter("@Contact_Person", SqlDbType.VarChar)).Value = DBNull.Value;
 
             if (Email != string.Empty && Email != null)
                 Command.Parameters.Add(new SqlParameter("@Email", SqlDbType.VarChar)).Value = Email;

@@ -12,12 +12,11 @@
                 <p class="mb-1">
                     <label>
                         @{
-                            string address = @Model.dt.Rows[0]["Address"] + " GSTIN:" + @Model.dt.Rows[0]["GSTIN"] + " Tel:" + @Model.dt.Rows[0]["Mobile_No"];
+                            var address = Model.dt.Rows[0]["Address"] + ", " + @Model.dt.Rows[0]["City"] + ", " + @Model.dt.Rows[0]["State"] + "-" + @Model.dt.Rows[0]["Pin_Code"];
                         }
-
-                        <input name="ClientShipAddress" id="popup_rdoClientShippingAddress" type="radio" value="@address" data-value="@Model.dt.Rows[0]["Id"]">
+                        <input name="ClientShipAddress" id="popup_rdoClientShippingAddress" type="radio" data-Address="@address" data-GSTIN="@Model.dt.Rows[0]["GSTIN"]" data-Tel="@Model.dt.Rows[0]["Mobile_No"]" data-value="@Model.dt.Rows[0]["Id"]">
                         <span>
-                            @Model.dt.Rows[0]["Address"] <br />
+                            @Model.dt.Rows[0]["Address"], @Model.dt.Rows[0]["City"], @Model.dt.Rows[0]["State"]-@Model.dt.Rows[0]["Pin_Code"] <br />
                             GSTIN: @Model.dt.Rows[0]["GSTIN"]<br />
                             Tel: @Model.dt.Rows[0]["Mobile_No"]
                         </span>

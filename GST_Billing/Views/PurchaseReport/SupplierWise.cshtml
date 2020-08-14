@@ -1,0 +1,155 @@
+﻿@model GST_Billing.Models.PurchaseReportManagement
+@using ReportViewerForMvc;
+
+@{
+    ViewBag.Title = "SupplierWise";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-invoice.min.css">
+
+<!-- BEGIN: Page Main-->
+<!-- invoice list -->
+<section class="invoice-list-wrapper section mb-10">
+    <div class="card">
+        <div class="card-content">
+            <form id="ReportFilter">
+                <div class="row">
+                    <div class="input-field col m3 s12">
+                        @Html.DropDownListFor(m => m.Item_Id, new SelectList(Model.ItemList, "Value", "Text"), "All Item", new { @class = "select2 browser-default" })
+                    </div>
+                    <div class="input-field col m3 s12">
+                        @Html.DropDownListFor(m => m.Supplier_Id, new SelectList(Model.SupplierList, "Value", "Text"), "All Supplier", new { @class = "select2 browser-default" })
+                    </div>
+                    <div class="input-field col m2 s12">
+                        @Html.TextBoxFor(m => m.From_Date, "{0:dd MMM yyyy}", new { @class = "datepicker mr-2 mb-1" })
+                        <label for="first_name01">From Date</label>
+                    </div>
+                    <div class="input-field col m2 s12">
+                        @Html.TextBoxFor(m => m.To_Date, "{0:dd MMM yyyy}", new { @class = "datepicker mr-2 mb-1" })
+                        <label for="first_name01">To Date</label>
+                    </div>
+                    <div class="input-field col m2 s12">
+                        <button type="button" name="Search" id="Search" class="po btn waves-effect waves-light width-100 mt-2">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content padding-1">
+            <div class="responsive-table">
+                @*<button type="submit" class="btn waves-effect waves-light purple">
+                        <i class="material-icons left">file_download</i> <span class="hide-on-small-only">Export To Excel</span>
+                    </button>*@
+                <!-- create invoice button-->
+                <div id="dialog-data-table">
+                    @if (ViewBag.ReportViewer != null)
+                    {
+                        @Html.ReportViewer(ViewBag.ReportViewer as Microsoft.Reporting.WebForms.ReportViewer)
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row hide" id="loading">
+        <div class="col s12">
+            <div id="circular-flashing" class="card card-tabs padding-10">
+                <div class="row">
+                    <div class="col s12 m12 center">
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-blue">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-red">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-yellow">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-green">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Add new email popup Ends-->
+
+@section footercontent
+{
+    <script src="../../../app-assets/js/scripts/form-select2.js"></script>
+
+    <script>
+
+        $(document).on('click', '#Search', function () {
+
+            var valdata = $("#ReportFilter").serialize();
+
+            $.ajax({
+                url: "/PurchaseReport/SupplierWise",
+                type: "Post",
+                data: valdata,
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                beforeSend: function () {
+                    $('#dialog-data-table').empty();
+                    $("#loading").removeClass("hide");
+                },
+                complete: function () {
+                    $("#loading").addClass("hide");
+                },
+                success: function (response) {
+                    $('#dialog-data-table').empty();
+                    $('#dialog-data-table').html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        })
+
+    </script>
+}

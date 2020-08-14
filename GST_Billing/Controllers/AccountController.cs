@@ -36,7 +36,7 @@ namespace GST_Billing.Controllers
                     user.Name = Convert.ToString(dt.Rows[0]["Name"]);
                     user.Email = Convert.ToString(dt.Rows[0]["Email"]);
                     user.Designation_ID = Convert.ToInt32(dt.Rows[0]["Designation_ID"]);
-                    user.User_ID = Convert.ToInt32(dt.Rows[0]["User_ID"]);
+                    user.User_ID = Convert.ToInt32(dt.Rows[0]["User_ID"]); 
                     user.Company_Id = Convert.ToInt32(dt.Rows[0]["Company_Id"]);
 
                     var serializer = new JavaScriptSerializer();
@@ -52,7 +52,6 @@ namespace GST_Billing.Controllers
                     string encTicket = FormsAuthentication.Encrypt(ticket);
                     // Create the cookie.
                     Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
-
 
                     return Redirect("~/Home/Index");
                 }
@@ -118,7 +117,7 @@ namespace GST_Billing.Controllers
             ViewBag.Title = "CompanyProfile";
 
             CompanyDetailsManagement objCom = new CompanyDetailsManagement();
-            objCom.Company_Id= (User as GST_Billing.Models.MyPrincipal).User.Company_Id;
+            objCom.Company_Id = (User as GST_Billing.Models.MyPrincipal).User.Company_Id;
             objCom.Sp_Operation = "select";
             DataTable dt = new DataTable();
             dt = new DataTable();
@@ -153,18 +152,18 @@ namespace GST_Billing.Controllers
             {
                 string path = Server.MapPath("~/app-assets/images/logo/");
 
-                logofilePath = path + objCom.Company_Id+"_"+Path.GetFileName(logo.FileName);
+                logofilePath = path + objCom.Company_Id + "_logo.png";
                 logo.SaveAs(logofilePath);
-                logofilePath = "../app-assets/images/logo/" + objCom.Company_Id + "_" + logo.FileName;
+                logofilePath = "../app-assets/images/logo/" + objCom.Company_Id + "_logo.png";
             }
 
             if (favicon != null)
             {
                 string path = Server.MapPath("~/app-assets/images/logo/");
 
-                faviconfilePath = path + objCom.Company_Id + "_" + Path.GetFileName(favicon.FileName);
+                faviconfilePath = path + objCom.Company_Id + "_fav.png";
                 favicon.SaveAs(faviconfilePath);
-                faviconfilePath = "../app-assets/images/logo/" + objCom.Company_Id + "_" + favicon.FileName;
+                faviconfilePath = "../app-assets/images/logo/" + objCom.Company_Id + "_fav.png";
             }
 
             if (logofilePath != "" || faviconfilePath != "")
@@ -176,7 +175,28 @@ namespace GST_Billing.Controllers
                 objCom.Getcompanydetails();
             }
 
+            TempData["Success"] = "Success";
+
             return Redirect("CompanyProfile");
+        }
+
+        public JsonResult Getlocalstoragedata()
+        {
+            CompanyDetailsManagement objCom = new CompanyDetailsManagement();
+            objCom.Company_Id = (User as GST_Billing.Models.MyPrincipal).User.Company_Id;
+            objCom.Sp_Operation = "select";
+            DataTable dt = new DataTable();
+            dt = new DataTable();
+            dt = objCom.Getcompanydetails();
+
+            if (dt.Rows.Count > 0)
+            {
+                List<CompanyDetailsManagement> CompanyDetails = new List<CompanyDetailsManagement>();
+                CompanyDetails = CommonMethod.ConvertToList<CompanyDetailsManagement>(dt);
+                objCom = CompanyDetails[0];
+            }
+
+            return Json(objCom, JsonRequestBehavior.AllowGet);
         }
     }
 }

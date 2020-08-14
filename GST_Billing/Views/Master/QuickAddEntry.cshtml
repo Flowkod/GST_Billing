@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = @ViewBag.Title;
+    ViewBag.Title = "Quick Add Entry";
     Layout = null;
 }
 <style>
@@ -14,17 +14,24 @@
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/jqueryval")
 
-@if (Request.QueryString["Addedfrom"] == "purchase supplier")
+@if (Request.QueryString["Addedfrom"] == "QuickAddSupplier")
 {
     <script>
         $("#iframe").attr('src', "../Master/AddSupplier?Addedfrom=@Request.QueryString["Addedfrom"]");
     </script>
 }
 
-@if (Request.QueryString["Addedfrom"] == "purchase client")
+@if (Request.QueryString["Addedfrom"] == "QuickAddClient")
 {
     <script>
         $("#iframe").attr('src', "../Master/AddClient?Addedfrom=@Request.QueryString["Addedfrom"]");
+    </script>
+}
+
+@if (Request.QueryString["Addedfrom"] == "QuickAddItem")
+{
+    <script>
+        $("#iframe").attr('src', "../Master/AddItem?Addedfrom=@Request.QueryString["Addedfrom"]");
     </script>
 }
 

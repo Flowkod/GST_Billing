@@ -1,0 +1,213 @@
+﻿@model GST_Billing.Models.QuotationManagement
+
+@{
+    ViewBag.Title = "Quotation";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-invoice.min.css">
+<link href="~/app-assets/css/pages/app-invoice.css" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-sidebar.css">
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-email.css">
+
+<style>
+    .select2-container {
+        z-index: 9999999;
+    }
+
+  
+    [type=checkbox] + span:not(.lever):before, [type=checkbox]:not(.filled-in) + span:not(.lever):after {
+        border: solid 2px #ddd;
+    }
+</style>
+<!-- BEGIN: Page Main-->
+<!-- invoice list -->
+<section class="invoice-list-wrapper section mb-10">
+    <div class="responsive-table">
+        <div class="top display-flex mb-2">
+            <div class="action-filters">
+                <div id="example_filter" class="dataTables_filter">
+                    <label>
+                        <input type="search" id="ClientSearch" class="" placeholder="Type Client Name" aria-controls="example">
+                        <div class="filter-btn">
+                            <!-- Dropdown Trigger -->
+                            <a class="compose-email-trigger btn waves-effect waves-light purple darken-1 border-round" href="#" data-target="btn-filter">
+                                <span class="hide-on-small-only">Filter Quote</span>
+                                <i class="material-icons">filter_list</i>
+                            </a>
+                            <a class="btn-floating waves-effect waves-light gradient-45deg-purple-deep-orange" href="../Quotation/Quotation">
+                                <i class="material-icons">refresh</i>
+                            </a>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="actions action-btns display-flex align-items-center col m2">
+                <!-- Dropdown Trigger -->
+                <a class='dropdown-trigger btn waves-effect waves-light border-round z-depth-4 col m12' href='#'
+                   data-target='btn-filter'>
+                    <i class="material-icons">add</i>
+                    <span class="hide-on-small-only">Add New</span>
+                </a>
+                <!-- Dropdown Structure -->
+                <ul id='btn-filter' class='dropdown-content'>
+                    <li><a href="../Quotation/AddQuotation?Quote_Type=Quotation">Quotation</a></li>
+                    <li><a href="../Quotation/AddQuotation?Quote_Type=Proforma Invoice">Proforma Invoice</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- create invoice button-->
+        <div id="dialog-data-table">
+            @Html.Action("QuotationDataTable", "Quotation")
+        </div>
+        <br />
+    </div>
+    <div class="row hide" id="loading">
+        <div class="col s12">
+            <div id="circular-flashing" class="card card-tabs padding-10">
+                <div class="row">
+                    <div class="col s12 m12 center">
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-blue">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-red">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-yellow">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                            <div class="spinner-layer spinner-green">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- Add new email popup Ends-->
+<!-- email compose sidebar -->
+<div class="email-compose-sidebar">
+    <div class="card quill-wrapper">
+        <div class="card-content pt-0">
+            <div class="card-header display-flex pb-2">
+                <h3 class="card-title">FILTER QUOTATION LIST</h3>
+                <div class="close close-icon">
+                    <i class="material-icons">close</i>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <!-- form start -->
+            <form id="FormFilter" class="edit-email-item mt-10 mb-10">
+                <div class="input-field">
+                    @Html.TextBoxFor(m => m.Company_Name, new { @id = "ClientFilter" })
+                    <label>Client Name</label>
+                </div>
+                <div class="input-field">
+                    @Html.DropDownListFor(m => m.Client_Id, new SelectList(Model.ClientList, "Value", "Text"), "Client Name", new { @class = "select2 browser-default" })
+                    <label>Client</label>
+                </div>
+                <div class="input-field">
+                    @Html.TextBoxFor(m => m.Quotation_No)
+                    <label>Quotation No</label>
+                </div>
+
+                <div class="row input-field ">
+                    <div class="col m6 s12">
+                        <label>From Date</label>
+                        @Html.TextBoxFor(m => m.Date, new { @class = "datepicker" })
+                    </div>
+                    <div class="col m6 s12">
+                        <div>
+                            <label>To Date</label>
+                            @Html.TextBoxFor(m => m.To_Date, new { @class = "datepicker" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row input-field ">
+                    <div class="col m6 s12">
+                        <label>Valid From</label>
+                        @Html.TextBoxFor(m => m.Valid_From_Date, new { @class = "datepicker" })
+                    </div>
+                    <div class="col m6 s12">
+                        <div>
+                            <label>Valid To</label>
+                            @Html.TextBoxFor(m => m.Valid_To_Date, new { @class = "datepicker" })
+                        </div>
+                    </div>
+                </div>
+                <div class="input-field">
+                    <select id="Tax1" class="invoice-tax browser-default" name="Status">
+                        <option value="" selected disabled>Status</option>
+                        <option value="Open">Open</option>
+                        <option value="Converted">Converted</option>
+                        <option value="Expired">Expired</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+
+                </div>
+                <div class="input-field">
+                    @Html.DropDownListFor(m => m.Quote_Item_Id, new SelectList(Model.ItemList, "Value", "Text"), "Item Name", new { @class = "select2 browser-default" })
+                    <label>Item</label>
+                </div>
+
+                <div class="card-action pl-0 pr-0 right-align">
+                    <button type="reset" class="btn-small waves-effect waves-light cancel-email-item mr-1">
+                        <i class="material-icons left">close</i>
+                        <span>Cancel</span>
+                    </button>
+                    <button type="button" class="btn-small waves-effect waves-light cyan send-item" data-value="0" id="filter-quote">
+                        <i class="material-icons left">filter_list</i>
+                        <span>Search</span>
+                    </button>
+                </div>
+                @Html.HiddenFor(m => m.Page_No, new { @id = "hid-page-no" })
+            </form>
+            <!-- form start end-->
+        </div>
+    </div>
+</div>
+
+@section footercontent
+{
+    <script src="../../../app-assets/js/scripts/form-select2.js"></script>
+    <script src="../app-assets/js/Quotation.js"></script>
+}

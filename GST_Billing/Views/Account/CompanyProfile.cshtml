@@ -65,7 +65,7 @@
                 <div class="row user-profile mt-1 ml-0 mr-0">
                     @if (Model.Company_Logo != null)
                     {
-                        <input type="file" id="input-file-events" class="dropify-event" name="logo"
+                        <input type="file" id="input-file-events" class="dropify-event" name="logo" width="50%"
                                data-default-file="@Model.Company_Logo" />
                     }
                     else
@@ -187,7 +187,7 @@
                                 </div>
                                 <div class="col s12 mt-3">
                                     @Html.HiddenFor(m => m.Company_Id)
-                                  
+
                                     <button type="submit" class="btn indigo waves-effect waves-light right">Update</button>
                                 </div>
                             </div>
@@ -203,4 +203,39 @@
 {
     <script src="../app-assets/vendors/dropify/js/dropify.min.js"></script>
     <script src="../app-assets/js/scripts/form-file-uploads.js"></script>
+
+    @if (Convert.ToString(TempData["Success"]) != "")
+    {
+        <script>
+            $(document).ready(function () {
+                localStorage.clear();
+
+                localStorage.setItem("Company_Name", '@Model.Company_Name');
+                localStorage.setItem("Email", '@Model.Email');
+                localStorage.setItem("Mobile_No", '@Model.Mobile_No');
+                localStorage.setItem("GSTIN", '@Model.GSTIN');
+                localStorage.setItem("Shipping_Address", '@Model.Shipping_Address');
+                localStorage.setItem("Company_Logo", '@Model.Company_Logo');
+                localStorage.setItem("Favicon", '@Model.Favicon');
+                localStorage.setItem("Address", '@Model.Address');
+                localStorage.setItem("City", '@Model.City');
+                localStorage.setItem("State", '@Model.State');
+                localStorage.setItem("Pin_Code", '@Model.Pin_Code');
+            });
+
+        </script>
+    }
+
+    <script>
+
+       var img = document.createElement('img');
+        img.onload = function () {
+            //alert(img.width + ' x ' + img.height);
+            if (img.width > 555) {
+                $(".dropify-render img").attr("style","max-width:555px;")
+            }
+        };
+        img.src = '@Model.Company_Logo';
+
+    </script>
 }

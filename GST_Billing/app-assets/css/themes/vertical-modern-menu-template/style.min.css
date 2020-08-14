@@ -59,7 +59,8 @@ footer {
 }
 
     footer.page-footer {
-        padding-top: 1px
+        padding-top: 1px;
+        position:relative;
     }
 
 select {
@@ -4233,7 +4234,7 @@ span.badge {
 }
 
     span.badge.pill {
-        font-size: .8rem;
+        font-size: .7rem;
         line-height: 20px;
         min-width: 1rem;
         height: 20px;

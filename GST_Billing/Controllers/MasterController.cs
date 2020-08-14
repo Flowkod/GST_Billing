@@ -45,7 +45,7 @@ namespace GST_Billing.Controllers
             objItem.Tax_List = new List<SelectListItem>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                objItem.Tax_List.Add(new SelectListItem() { Value = dt.Rows[i]["Id"].ToString(), Text = dt.Rows[i]["Tax_Name"].ToString() });
+                objItem.Tax_List.Add(new SelectListItem() { Value = dt.Rows[i]["GST"].ToString(), Text = dt.Rows[i]["Tax_Name"].ToString() });
             }
 
             return View(objItem);
@@ -164,13 +164,13 @@ namespace GST_Billing.Controllers
             objItem.Tax_List = new List<SelectListItem>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                objItem.Tax_List.Add(new SelectListItem() { Value = dt.Rows[i]["Id"].ToString(), Text = dt.Rows[i]["Tax_Name"].ToString() });
+                objItem.Tax_List.Add(new SelectListItem() { Value = dt.Rows[i]["GST"].ToString(), Text = dt.Rows[i]["Tax_Name"].ToString() });
             }
 
             return View(objItem);
         }
         [HttpPost]
-        public ActionResult Additem(ItemManagement objItem)
+        public ActionResult Additem(ItemManagement objItem,string Addedfrom)
         {
             ViewBag.Title = "item";
 
@@ -184,7 +184,27 @@ namespace GST_Billing.Controllers
             {
                 objItem.Sp_Operation = "update";
             }
-            objItem.Getitems();
+
+            DataTable dt = new DataTable();
+            dt = objItem.Getitems();
+
+            if (Addedfrom != null)
+            {
+                if (Addedfrom == "QuickAddItem")
+                {
+                    TempData["AddedFrom"] = "QuickAddItem";
+                    Session["Item_Id"] = Convert.ToString(dt.Rows[0]["Id"]);
+                    Session["Item_Name"] = objItem.Item_Name + " (" + objItem.Item_Code + ")";
+                    if (HttpContext.Cache["ItemList"] != null)
+                    {
+                        HttpContext.Cache.Remove("ItemList");
+                    }
+                }
+
+                return Redirect("Additem");
+            }
+            
+
             TempData["Success"] = "Success";
 
             return Redirect("item");
@@ -397,7 +417,7 @@ namespace GST_Billing.Controllers
 
             if (dt.Rows.Count > 0)
             {
-                objTax.Id = Convert.ToInt32(dt.Rows[0]["Id"]);
+                objTax.Id = Convert.ToInt32(dt.Rows[0]["GST"]);
             }
 
 
@@ -480,9 +500,9 @@ namespace GST_Billing.Controllers
                 //if entry add for purchase order 
                 if (Addedfrom != null)
                 {
-                    if (Addedfrom == "purchase supplier")
+                    if (Addedfrom == "QuickAddSupplier")
                     {
-                        TempData["AddedFrom"] = "Purchase";
+                        TempData["AddedFrom"] = "QuickAddSupplier";
                         Session["Supplier_Id"] = Convert.ToString(dt.Rows[0]["Supplier_Id"]);
                         Session["Supplier_Company_Name"] = objSupplier.Company_Name + " (" + objSupplier.Code + ")";
                     }
@@ -868,9 +888,9 @@ namespace GST_Billing.Controllers
 
                 if (Addedfrom != null)
                 {
-                    if (Addedfrom == "purchase client")
+                    if (Addedfrom == "QuickAddClient")
                     {
-                        TempData["AddedFrom"] = "Purchase";
+                        TempData["AddedFrom"] = "QuickAddClient";
                         Session["Client_Id"] = Convert.ToString(dt.Rows[0]["Client_Id"]);
                         Session["Client_Company_Name"] = objClient.Company_Name + " (" + objClient.Code + ")";
                     }
@@ -1462,6 +1482,99 @@ namespace GST_Billing.Controllers
             objUser.GetUser();
 
             return Redirect("Employee");
+        }
+
+        //Other Management
+
+        public ActionResult QuickAddEntry()
+        {            
+            return View();
+        }
+
+        [HttpGet]
+        public JsonResult GetsupplierBillAddress(int Supplier_Id)
+        {
+            SupplierManagement objSupplier = new SupplierManagement();
+            objSupplier.Id = Supplier_Id;
+
+            objSupplier.Sp_Operation = "select";
+
+            DataTable dt = new DataTable();
+            dt = objSupplier.Getsupplier();
+
+            string[] data = new string[3];
+
+            if (dt.Rows.Count > 0)
+            {
+                string Address = "";
+                Address += Convert.ToString(dt.Rows[0]["Address"]);
+                Address += Convert.ToString(dt.Rows[0]["City"]) == "" ? "" : ", " + Convert.ToString(dt.Rows[0]["City"]) + "";
+                Address += Convert.ToString(dt.Rows[0]["State"]) == "" ? "" : ", " + Convert.ToString(dt.Rows[0]["State"]) + "";
+                Address += Convert.ToString(dt.Rows[0]["Country"]) == "" ? "" : ", " + Convert.ToString(dt.Rows[0]["Country"]) + "";
+                Address += Convert.ToString(dt.Rows[0]["Pin_Code"]) == "" ? "" : "-" + Convert.ToString(dt.Rows[0]["Pin_Code"]) + "";
+
+                data[0] = Address;
+
+                data[1] = Convert.ToString(dt.Rows[0]["GSTIN"]);
+                data[2] = Convert.ToString(dt.Rows[0]["Mobile_No"]) + (Convert.ToString(dt.Rows[0]["Phone_No"]) == "" ? "" : "," + Convert.ToString(dt.Rows[0]["Phone_No"]) + "");
+            }
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetNewAddeddSupplierRecord()
+        {
+            string[] data = new string[2];
+
+            data[0] = Convert.ToString(Session["Supplier_Id"]);
+            data[1] = Convert.ToString(Session["Supplier_Company_Name"]);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetNewAddeddClientRecord()
+        {
+            string[] data = new string[2];
+
+            data[0] = Convert.ToString(Session["Client_Id"]);
+            data[1] = Convert.ToString(Session["Client_Company_Name"]);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetNewAddeddItemRecord()
+        {
+            string[] data = new string[2];
+
+            data[0] = Convert.ToString(Session["Item_Id"]);
+            data[1] = Convert.ToString(Session["Item_Name"]);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetClientShipAddress(int Client_Id)
+        {
+            ClientManagement objClient = new ClientManagement();
+            objClient.Id = Client_Id;
+            objClient.Sp_Operation = "select_shipping_address";
+            objClient.dt = objClient.GetClient();
+            return View(objClient);
+        }
+        public JsonResult GetClientBillingAddress(int Client_Id)
+        {
+            ClientManagement objClient = new ClientManagement();
+            objClient.Id = Client_Id;
+            objClient.Sp_Operation = "select";
+            DataTable dt = new DataTable();
+            dt = objClient.GetClient();
+
+            string[] data = new string[4];
+            if (dt.Rows.Count > 0)
+            {
+                data[0] = Convert.ToString(dt.Rows[0]["Address"]) + ", " + Convert.ToString(dt.Rows[0]["City"]) + ", " + Convert.ToString(dt.Rows[0]["State"]) + "-" + Convert.ToString(dt.Rows[0]["Pin_Code"]);
+                data[1] = Convert.ToString(dt.Rows[0]["GSTIN"]);                
+                data[2] = Convert.ToString(dt.Rows[0]["Mobile_No"]) + "/ " + Convert.ToString(dt.Rows[0]["Phone_No"]); ;
+                data[3] = Convert.ToString(dt.Rows[0]["Email"]);
+            }
+           
+
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -3,69 +3,71 @@
 <div class="result-count pl-1 white-text">
     <p>About @Model.dt1.Rows[0]["Total_Items"] result found...</p>
 </div>
-<table id="example" class="table invoice-data-table white border-radius-4 pt-1">
-    <thead>
-        <tr>
-            <th class="pl-1">
-                <span>#</span>
-            </th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>MRP</th>
-            <th>Unit</th>
-            <th>Quantity</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < Model.dt.Rows.Count; i++)
-        {
+<div style="overflow:auto;">
+    <table id="example" class="table invoice-data-table white border-radius-4 pt-1">
+        <thead>
             <tr>
-                
-                <td class="pl-1">
-                    @Convert.ToString(Model.dt.Rows[i]["SrNo"])
-                </td>
-                <td><a href="../Master/Additem?itemid=@Convert.ToString(Model.dt.Rows[i]["Id"])"> @Convert.ToString(Model.dt.Rows[i]["Item_Name"])</a> </td>
-                <td><small>@Convert.ToString(Model.dt.Rows[i]["Description"])</small></td>
-                <td>
-                    @if (Convert.ToString(Model.dt.Rows[i]["Item_Type"]) == "Product")
-                    {
-                        <span class="bullet green"></span>
-                        <small> @Convert.ToString(Model.dt.Rows[i]["Item_Type"])</small>
-                    }
-                    else
-                    {
-                        <span class="bullet blue"></span>
-                        <small> @Convert.ToString(Model.dt.Rows[i]["Item_Type"])</small>
-                    }
-                </td>
-                <td>
-                    @if (Convert.ToString(Model.dt.Rows[i]["MRP"]) != "")
-                    {
-                        <span>Rs.@Convert.ToString(Model.dt.Rows[i]["MRP"])</span>
-                    }
-                </td>
-                <td>
-                    <small> @Convert.ToString(Model.dt.Rows[i]["UOM_Unit"])</small>
-                </td>
-                <td>
-                    @Convert.ToString(Model.dt.Rows[i]["UOM_Qty"])
-                </td>
-                <td>
-                    <div class="invoice-action">
-                        <a href="../Master/DeleteItem?itemid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-view mr-4 ">
-                            <i class="material-icons red-text">clear</i>
-                        </a>
-                        <a href="../Master/Additem?itemid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-edit">
-                            <i class="material-icons cyan-text">edit</i>
-                        </a>
-                    </div>
-                </td>
+                <th class="pl-1">
+                    <span>#</span>
+                </th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>MRP</th>
+                <th>Unit</th>
+                <th>Quantity</th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.dt.Rows.Count; i++)
+            {
+                <tr>
+
+                    <td class="pl-1">
+                        @Convert.ToString(Model.dt.Rows[i]["SrNo"])
+                    </td>
+                    <td><a href="../Master/Additem?itemid=@Convert.ToString(Model.dt.Rows[i]["Id"])"> @Convert.ToString(Model.dt.Rows[i]["Item_Name"])</a> </td>
+                    <td><small>@Convert.ToString(Model.dt.Rows[i]["Description"])</small></td>
+                    <td>
+                        @if (Convert.ToString(Model.dt.Rows[i]["Item_Type"]) == "Product")
+                        {
+                            <span class="bullet green"></span>
+                            <small> @Convert.ToString(Model.dt.Rows[i]["Item_Type"])</small>
+                        }
+                        else
+                        {
+                            <span class="bullet blue"></span>
+                            <small> @Convert.ToString(Model.dt.Rows[i]["Item_Type"])</small>
+                        }
+                    </td>
+                    <td>
+                        @if (Convert.ToString(Model.dt.Rows[i]["MRP"]) != "")
+                        {
+                            <span>Rs.@Convert.ToString(Model.dt.Rows[i]["MRP"])</span>
+                        }
+                    </td>
+                    <td>
+                        <small> @Convert.ToString(Model.dt.Rows[i]["UOM_Unit"])</small>
+                    </td>
+                    <td>
+                        @Convert.ToString(Model.dt.Rows[i]["UOM_Qty"])
+                    </td>
+                    <td>
+                        <div class="invoice-action">
+                            <a href="../Master/DeleteItem?itemid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-view mr-4 ">
+                                <i class="material-icons red-text">clear</i>
+                            </a>
+                            <a href="../Master/Additem?itemid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-edit">
+                                <i class="material-icons cyan-text">edit</i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <div id="example_wrapper" class="dataTables_wrapper no-footer">
     <div class="bottom">

@@ -1,0 +1,42 @@
+﻿
+
+@model GST_Billing.Models.InvoiceManagement
+
+<table class="highlight striped short-invoice-data-table">
+    <tbody>
+        @for (int i = 0; i < Model.dt.Rows.Count; i++)
+        {
+            <tr class="cursor-pointer" id="view-po" data-value="@Convert.ToString(Model.dt.Rows[i]["Id"])">
+                <td>
+                    Po No.-@Convert.ToString(Model.dt.Rows[i]["Invoice_No"]) <br />
+                    @Convert.ToString(Model.dt.Rows[i]["Company_Name"])<br />
+
+                    Status-
+                    @if (Convert.ToString(Model.dt.Rows[i]["Status"]) == "Open")
+                    {
+                        <span class="cyan-text">@Convert.ToString(Model.dt.Rows[i]["Status"])</span>
+                    }
+                    else if (Convert.ToString(Model.dt.Rows[i]["Status"]) == "Expired")
+                    {
+                        <span class="red-text">@Convert.ToString(Model.dt.Rows[i]["Status"])</span>
+                    }
+                    else if (Convert.ToString(Model.dt.Rows[i]["Status"]) == "Cancelled")
+                    {
+                        <span class="pink-text">@Convert.ToString(Model.dt.Rows[i]["Status"])</span>
+                    }
+                    else if (Convert.ToString(Model.dt.Rows[i]["Status"]) == "Converted")
+                    {
+                        <span class="green-text">@Convert.ToString(Model.dt.Rows[i]["Status"])</span>
+                    }
+                </td>
+                <td>
+                    @Convert.ToDateTime(Model.dt.Rows[i]["Date"]).ToString("dd MMM yyyy")<br />
+                    @Convert.ToString(Model.dt.Rows[i]["Gross_Total"])Rs.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

@@ -1,0 +1,216 @@
+﻿
+@{
+    ViewBag.Title = "Preferences";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/page-account-settings.css">
+
+<style>
+    #loading {
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        margin: auto;
+        left: 0;
+        height: -webkit-fill-available;
+        background-color: #fafafa96;
+        width: 100%;
+    }
+
+        #loading .loadicon {
+            margin-top: 25%;
+        }
+        .tabs .tab a{
+            font-size:13px;
+        }
+</style>
+
+<div class="content-wrapper-before gradient-45deg-indigo-purple"></div>
+<div class="breadcrumbs-dark pb-0 pt-4" id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s10 m6 l6">
+                <h5 class="breadcrumbs-title mt-0 mb-0"><span>Preferences</span></h5>
+                <ol class="breadcrumbs mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="../Home/index">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Preferences</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Setting
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Account settings -->
+<section class="tabs-vertical mt-1 section">
+    <div class="row">
+        <div class="col l3 s12  padding-1">
+            <!-- tabs  -->
+            <div class="card-panel padding-4">
+                <ul class="tabs">
+                    <h6 class="breadcrumbs-title"><span>General</span></h6>
+                    <li class="tab">
+                        <a href="#general">
+                            <i class="material-icons">brightness_low</i>
+                            <span>General</span>
+                        </a>
+                    </li>
+                    <h6 class="breadcrumbs-title"><span>Document</span></h6>
+                    <li class="tab">
+                        <a href="#purchaseorder" data-target="../Preferences/PurchaseOrderPreferences">
+                            <i class="material-icons">add_shopping_cart</i>
+                            <span>Purchase Order</span>
+                        </a>
+                    </li>                    
+                    <li class="tab">
+                        <a href="#quotation" data-target="../Preferences/QuotationPreferences">
+                            <i class="material-icons">content_paste</i>
+                            <span>Quotation</span>
+                        </a>
+                    </li>
+                    <li class="tab">
+                        <a href="#social-link">
+                            <i class="material-icons">receipt</i>
+                            <span>Invoice</span>
+                        </a>
+                    </li>
+                    <h6 class="breadcrumbs-title"><span>Company</span></h6>
+                    <li class="tab">
+                        <a href="#change-password">
+                            <i class="material-icons">format_list_bulleted</i>
+                            <span>Taxes</span>
+                        </a>
+                    </li>
+                    <li class="tab">
+                        <a href="#change-password">
+                            <i class="material-icons">face</i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col l9 s12 padding-1">
+            <!-- tabs content -->
+            <div id="general">
+                <div class="card-panel">
+                   
+                </div>
+
+            </div>
+            <div id="purchaseorder">
+                <div id="dialog">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="row hide" id="loading">
+    <div class="col s12 m12 center loadicon">
+        <div class="preloader-wrapper small active">
+            <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section footercontent
+{
+    <script src="../app-assets/vendors/dropify/js/dropify.min.js"></script>
+    <script>
+
+        $(document).on('click', '.tabs a', function () {
+
+            url_destination = $(this).attr("data-target");
+
+            $.ajax({
+                url: url_destination,
+                type: "Get",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                beforeSend: function () {
+                    $('#dialog').empty();
+                    document.getElementById('loading').style.display = "block";
+                },
+                complete: function () {
+                    document.getElementById('loading').style.display = "none";
+                },
+                success: function (response) {
+                    $('#dialog').empty();
+                    $('#dialog').html(response);
+                    dropifyload();
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+        function dropifyload() {
+               
+                // Used events
+                var drEvent = $('.dropify-event').dropify();
+
+                drEvent.on('dropify.beforeClear', function (event, element) {
+                    return confirm("Do you really want to delete \"" + element.filename + "\" ?");
+                });
+
+                drEvent.on('dropify.afterClear', function (event, element) {
+                    alert('File deleted');
+                });
+        }
+
+    </script>
+}

@@ -6469,6 +6469,18 @@ textarea {
                     background-color: #ff4081
                 }
 
+            .switch label input[type=checkbox]:checked + input + .lever {
+                background-color: #f7c7d8
+            }
+
+                .switch label input[type=checkbox]:checked + input + .lever:after, .switch label input[type=checkbox]:checked + input + .lever:before {
+                    left: 18px
+                }
+
+                .switch label input[type=checkbox]:checked + input + .lever:after {
+                    background-color: #ff4081
+                }
+
         .switch label .lever {
             position: relative;
             display: inline-block;
@@ -6529,6 +6541,16 @@ input[type=checkbox]:not(:disabled).tabbed:focus ~ .lever::before, input[type=ch
 .switch label input[type=checkbox][disabled] + .lever:after, .switch label input[type=checkbox][disabled]:checked + .lever:after {
     background-color: #949494
 }
+
+switch input[type=checkbox][disabled] + input + .lever {
+    cursor: default;
+    background-color: rgba(0,0,0,.12)
+}
+
+.switch label input[type=checkbox][disabled] + input + .lever:after, .switch label input[type=checkbox][disabled]:checked + input + .lever:after {
+    background-color: #949494
+}
+
 
 select {
     display: none;

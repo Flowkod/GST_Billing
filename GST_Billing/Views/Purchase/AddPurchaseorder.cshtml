@@ -1,0 +1,521 @@
+﻿@model  GST_Billing.Models.PurchaseOrderManagement
+
+@{
+    ViewBag.Title = "Purchaseorder";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+<style>
+    textarea {
+        height: 80px !important;
+    }
+
+    .companyname {
+        font-weight: bold;
+        font-size: 28px;
+    }
+
+    #BillAddressDiv input, #ShipAddressDiv input, #PoToAddressDiv input {
+        height: 1rem;
+    }
+
+    #BillAddressDiv textarea, #ShipAddressDiv textarea, #PoToAddressDiv textarea {
+        height: 50px !important;
+    }
+
+    #PoToAddressDiv span {
+        width: 100px;
+    }
+
+    #loading {
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        margin: auto;
+        left: 0;
+        height: -webkit-fill-available;
+        background-color: #fafafa96;
+        width: 100%;
+    }
+
+        #loading .loadicon {
+            margin-top: 25%;
+        }
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-invoice.css">
+
+
+<!-- app invoice View Page -->
+<section class="invoice-edit-wrapper section">
+    @using (Html.BeginForm("AddPurchaseorder", "Purchase", FormMethod.Post))
+    {
+        <div class="row">
+            <!-- invoice view page -->
+            <div class="col xl9 m8 s12">
+                <div class="card">
+                    <div class="card-content">
+                        <!-- header section -->
+                        <div class="row mb-3">
+                            <div class="col xl4 m12 display-flex align-items-center">
+                                <h6 class="invoice-number mr-4 mb-5">PO.No#</h6>
+                                @Html.TextBoxFor(m => m.PO_No)
+                                <div class="error pink-text display-inline">
+                                    @Html.ValidationMessageFor(m => m.PO_No, "")
+                                </div>
+                            </div>
+                            <div class="col xl8 m12">
+                                <div class="invoice-date-picker display-flex align-items-center">
+                                    <div class="display-flex align-items-center">
+                                        <small>Date: </small>
+                                        <div class="display-flex ml-4">
+                                            @Html.TextBoxFor(m => m.Date, new { @class = "datepicker mr-2 mb-1", @Value = @System.DateTime.Now.ToString("dd MMM yyyy") })
+                                            <div class="error pink-text">
+                                                @Html.ValidationMessageFor(m => m.Date, "")
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="display-flex align-items-center">
+                                        <small>Delivery Period: </small>
+                                        <div class="display-flex ml-4">
+                                            @Html.TextBoxFor(m => m.Delivery_Period, new { @class = "datepicker mr-2 mb-1", @Value = @System.DateTime.Now.ToString("dd MMM yyyy") })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- logo and title -->
+                        <div class="row mb-3 display-flex">
+                            <div class="col m6 s12 invoice-logo pt-1 push-m6 right-align m-auto logo-div">
+                            </div>
+                            <div class="col m6 s12 pull-m6">
+                                <h4 class="indigo-text">Purchase Order</h4>
+                            </div>
+                        </div>
+                        <!-- invoice address and contact -->
+                        <div class="row mb-3">
+                            <div class="col l6 s12">
+                                <h6>To</h6>
+
+                                <div class="input-field">
+                                    @Html.DropDownListFor(m => m.Supplier_Id, new SelectList(Model.SupplierList, "Value", "Text"), "Supplier Name", new { @id = "SupplierList", @class = "select2 browser-default" })
+                                    <div class="error">
+                                        @Html.ValidationMessageFor(m => m.Supplier_Id, "")
+                                    </div>
+                                </div>
+                                <div id="PoToAddressDiv" class="row">
+                                    <div class="col m12 input-field m-0">
+                                        @Html.TextAreaFor(m => m.Supplier_Address, new { @id = "PoToAddressText", @class = "materialize-textarea", @maxlength = "200", @style = "height:80px;" })
+                                    </div>
+                                    <label class="col m2">
+                                        GSTIN:
+                                    </label>
+                                    <div class="col m10 input-field m-0 inline">
+                                        @Html.TextBoxFor(m => m.Supplier_GSTIN, new { @id = "GSTIN" })
+                                    </div>
+                                    <br />
+                                    <label class="col m2">Tel:</label>
+                                    <div class="col m10 input-field m-0 inline">
+                                        @Html.TextBoxFor(m => m.Supplier_Tel, new { @id = "Tel" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col l6 s12" id="ShipAddressDiv">
+                                <div>
+                                    <h6>Ship To</h6>
+                                    <div class="input-field">
+                                        <p class="mb-1">
+                                            <label>
+                                                @if (Model.Ship_To == "ShipCompanyAddress")
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Ship_To, "", new { @checked = "checked", @id = "ShippingAddressType", @Value = "ShipCompanyAddress" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Ship_To, "", new { @id = "ShippingAddressType", @Value = "ShipCompanyAddress" })
+                                                }
+                                                <span>Com. Add.</span>
+                                            </label>
+                                            <label>
+                                                @if (Model.Ship_To == "ShipClientAddress")
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Ship_To, "", new { @checked = "checked", @id = "ShippingAddressType", @Value = "ShipClientAddress" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Ship_To, "", new { @id = "ShippingAddressType", @Value = "ShipClientAddress" })
+                                                }
+                                                <span>Client Add.</span>
+                                            </label>
+                                            <label>
+                                                @if (Model.Ship_To == "ShipAddnewAddress")
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Ship_To, "", new { @checked = "checked", @id = "ShippingAddressType", @Value = "ShipAddnewAddress" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Ship_To, "", new { @id = "ShippingAddressType", @Value = "ShipAddnewAddress" })
+                                                }
+                                                <span>Add New</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="input-field hide" id="ShipClientAddressDiv">
+                                        @Html.DropDownListFor(m => m.Ship_To_Client_Id, new SelectList(Model.ClientList, "Value", "Text"), "Client Name", new { @id = "ClientList", @class = "select2 browser-default" })
+                                        @Html.HiddenFor(m => m.Client_Ship_Address_Id, new { @id = "Client_Ship_Address_Id" })
+                                    </div>
+
+                                    <div id="ShipAddressTextDiv" class="row">
+                                        <div class="col m12 input-field m-0">
+                                            @Html.TextAreaFor(m => m.Ship_Address, new { @id = "Ship_Address_text", @placeholder = "Address", @class = "materialize-textarea", @maxlength = "200", @style = "height:80px;" })
+                                        </div>
+                                        <label class="col m2">
+                                            GSTIN:
+                                        </label>
+                                        <div class="col m10 input-field m-0 inline">
+                                            @Html.TextBoxFor(m => m.Ship_GSTIN, new { @id = "Ship_GSTIN_text", @placeholder = "GSTIN" })
+                                        </div>
+                                        <label class="col m2">
+                                            Tel:
+                                        </label>
+                                        <div class="col m10 input-field m-0 inline">
+                                            @Html.TextBoxFor(m => m.Ship_Tel, new { @id = "Ship_Tel_text", @placeholder = "Mobile No/ Phone" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col l6 s12">
+                                <div id="BillAddressDiv">
+                                    <h6>Bill To</h6>
+                                    <div class="input-field">
+                                        <p class="mb-1">
+                                            <label>
+                                                @if (Model.Bill_To == "BillCompanyAddress")
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Bill_To, "", new { @checked = "checked", @id = "BillingAddressType", @Value = "BillCompanyAddress" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Bill_To, "", new { @id = "BillingAddressType", @Value = "BillCompanyAddress" })
+                                                }
+                                                <span>Com. Add.</span>
+                                            </label>
+                                            <label>
+                                                @if (Model.Bill_To == "BillClientAddress")
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Bill_To, "", new { @checked = "checked", @id = "BillingAddressType", @Value = "BillClientAddress" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Bill_To, "", new { @id = "BillingAddressType", @Value = "BillClientAddress" })
+                                                }
+                                                <span>Client Add.</span>
+                                            </label>
+                                            <label>
+                                                @if (Model.Bill_To == "BillAddnewAddress")
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Bill_To, "", new { @checked = "checked", @id = "BillingAddressType", @Value = "BillAddnewAddress" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.RadioButtonFor(m => m.Bill_To, "", new { @id = "BillingAddressType", @Value = "BillAddnewAddress" })
+                                                }
+                                                <span>Add New</span>
+                                            </label>
+                                        </p>
+                                    </div>
+
+                                    <div class="input-field hide" id="BillClientAddressDiv">
+                                        @Html.DropDownListFor(m => m.Bill_To_Client_Id, new SelectList(Model.ClientList, "Value", "Text"), "Client Name", new { @id = "BillClientList", @class = "select2 browser-default" })
+                                    </div>
+                                    <div id="BillAddressTextDiv" class="row">
+                                        <div class="col m12 input-field m-0">
+                                            @Html.TextAreaFor(m => m.Bill_Address, new { @id = "Bill_Address_text", @placeholder = "Address", @class = "materialize-textarea", @maxlength = "200", @style = "height:80px;" })
+                                        </div>
+                                        <label class="col m2">
+                                            GSTIN:
+                                        </label>
+                                        <div class="col m10 input-field m-0 inline">
+                                            @Html.TextBoxFor(m => m.Bill_GSTIN, new { @id = "Bill_GSTIN_text", @placeholder = "GSTIN" })
+                                        </div>
+                                        <label class="col m2">
+                                            Tel:
+                                        </label>
+                                        <div class="col m10 input-field m-0 inline">
+                                            @Html.TextBoxFor(m => m.Bill_Tel, new { @id = "Bill_Tel_text", @placeholder = "Mobile No/ Phone" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col l12 s12">
+                                <hr />
+                            </div>
+                        </div>
+                        <!-- product details table-->
+                        <div id="AddedItemList" class="invoice-product-details mb-3">
+                            <table class="table hide" style="background-color:#fafafa;">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>UOM Unit</th>
+                                        <th>Qty</th>
+                                        <th>Rate</th>
+                                        <th>Dis.</th>
+                                        <th>CGST</th>
+                                        <th>SGST</th>
+                                        <th>Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ItemBodylist">
+                                    @if (Request.QueryString["purchaseid"] != null)
+                                    {
+                                        <div>
+                                            @Html.Action("GetItemsForUpdate", "Purchase")
+                                        </div>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="AddNewItem" class="invoice-product-details mb-3">
+                            @Html.Action("PurchaseItemList", "Purchase")
+                        </div>
+                        <!-- invoice subtotal -->
+                        <div class="invoice-subtotal">
+                            <div class="row">
+                                <div class="col m7 s12">
+                                    <div id="PaymentTermsDiv" class="input-field">
+                                        <label>Payment Terms</label>
+                                        @Html.TextBoxFor(m => m.Payment_Terms)
+                                    </div>
+                                    <div class="input-field" id="TransportDiv">
+                                        <label>Transport</label>
+                                        @Html.TextBoxFor(m => m.Transport)
+                                    </div>
+                                    <div class="input-field" id="ClientNotesDiv">
+                                        <label>Note</label>
+                                        @Html.TextAreaFor(m => m.Note, new { @id = "message5", @class = "materialize-textarea",@maxlength = "250", @style = "height: 80px;" })
+                                    </div>
+                                </div>
+                                <div class="col m4 s12 offset-l1">
+                                    <ul>
+                                        <li class="display-flex justify-content-between">
+                                            <span class="invoice-subtotal-title">Subtotal</span>
+                                            <h6 class="invoice-subtotal-value">
+                                                <span id="NetTotalSpan">@Model.Net_Total</span>
+                                                @Html.HiddenFor(m => m.Net_Total, new { @id = "Net_TotalHid" })
+                                            </h6>
+                                        </li>
+                                        <li class="display-flex justify-content-between mt-3">
+                                            <span class="invoice-subtotal-title">Discount (Rs)</span>
+                                            <h6 class="invoice-subtotal-value">
+                                                @Html.TextBoxFor(m => m.Round_Off, new { @id = "RoundOff", @type = "number", @class = "right-align" })
+                                            </h6>
+                                        </li>
+
+                                        <li>
+                                            <div class="divider mt-4 mb-4"></div>
+                                        </li>
+                                        <li class="display-flex justify-content-between green-text mb-5">
+                                            <span class="invoice-subtotal-title">Invoice Total</span>
+                                            <h6 class="invoice-subtotal-value">
+                                                <span id="GrossTotalSpan">@Model.Gross_Total</span>
+                                                @Html.HiddenFor(m => m.Gross_Total, new { @id = "Gross_TotalHid" })
+                                            </h6>
+                                        </li>
+
+                                        <li class="mt-2">
+                                            @Html.HiddenFor(m => m.Id)
+                                            
+                                            <button type="submit" name="Gst_Type" value="GST" class="po btn indigo waves-effect waves-light display-flex align-items-center justify-content-center width-100">Save As GST PO</button>
+                                            <button type="submit" name="Gst_Type" value="IGST" class="po btn purple waves-effect waves-light width-100 mt-2">Save As IGST PO</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- invoice action  -->
+            <div class="col xl3 m4 s12">
+                <div class="card invoice-action-wrapper mb-10">
+                    <div class="card-content">
+                        <div class="mb-3">
+                            <div class="invoice-terms display-flex flex-column">
+                                <div class="display-flex justify-content-between pb-4">
+                                    <span>Ship Address</span>
+                                    <div class="switch">
+                                        <label>
+                                            @Html.CheckBoxFor(m => m.ShipAddressAction, new { @checked = "checked", @datavalue = "ShipAddress", @class = "PoContent" })
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="display-flex justify-content-between pb-4">
+                                    <span>Bill Address</span>
+                                    <div class="switch">
+                                        <label>
+                                            @Html.CheckBoxFor(m => m.BillAddressAction, new { @checked = "checked", @datavalue = "BillAddress", @class = "PoContent" })
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="display-flex justify-content-between pb-4">
+                                    <span>Payment Terms</span>
+                                    <div class="switch">
+                                        <label>
+                                            @Html.CheckBoxFor(m => m.PaymentTermsAction, new { @checked = "checked", @datavalue = "PaymentTerms", @class = "PoContent" })
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="display-flex justify-content-between pb-4">
+                                    <span>Client Notes</span>
+                                    <div class="switch">
+                                        <label>
+                                            @Html.CheckBoxFor(m => m.ClientNoteAction, new { @checked = "checked", @datavalue = "ClientNotes", @class = "PoContent" })
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="display-flex justify-content-between pb-4">
+                                    <span>Transport</span>
+                                    <div class="switch">
+                                        <label>
+                                            @Html.CheckBoxFor(m => m.TransportAction, new { @checked = "checked", @datavalue = "Transport", @class = "PoContent" })
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="display-flex justify-content-between pb-4">
+                                    <span>Terms & Conditions</span>
+                                    <div class="switch">
+                                        <label>
+                                            @Html.CheckBoxFor(m => m.TermsConditionAction, new { @checked = "checked", @datavalue = "TermsCondition", @class = "PoContent" })
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <div id="dialog">
+
+        </div>
+    </div>
+</div>
+
+<div class="row hide" id="loading">
+    <div class="col s12 m12 center loadicon">
+        <div class="preloader-wrapper small active">
+            <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@using System.Web.Optimization
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+@section footercontent
+                                                {
+    @*<script src="../../../app-assets/vendors/form_repeater/jquery.repeater.min.js"></script>*@
+
+    <script src="../../../app-assets/js/scripts/advance-ui-modals.js"></script>
+    <script src="../app-assets/js/Purchaseorder.js"></script>
+
+    @if (Request.QueryString["purchaseid"] != null)
+    {
+        <script>
+            $('input.PoContent').each(function () {
+                PoActionManagement($(this));
+            });
+
+            $('input#ShippingAddressType').each(function () {
+
+                if ($(this).prop("checked") == true) {
+
+                    var value = $(this).attr('value');
+
+                    if (value == "ShipClientAddress") {
+                        $("#ShipClientAddressDiv").removeClass("hide");
+                    }
+                }
+            });
+
+            $('input#BillingAddressType').each(function () {
+                if ($(this).prop("checked") == true) {
+
+                    var value = $(this).attr('value');
+
+                    $("#BillClientAddressDiv").addClass("hide");
+
+                    if (value == "BillClientAddress") {
+                        $("#BillClientAddressDiv").removeClass("hide");
+                    }
+                }
+            });
+
+            $("#AddedItemList table").removeClass("hide");
+
+        </script>
+    }
+}

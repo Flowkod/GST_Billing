@@ -1,0 +1,116 @@
+﻿@model GST_Billing.Models.PreferencesManagment
+
+<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/dropify/css/dropify.min.css">
+
+<div>
+    @using (Html.BeginForm("PurchaseOrderPreferences", "Preferences", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <div id="Form-advance" class="card card card-default scrollspy mt-1">
+            <div class="card-content pb-10">
+                <h4 class="card-title mb-3"> Preferences For Purchase Order</h4>
+
+                <div class="invoice-terms display-flex flex-column">
+                    <div class="display-flex">
+                        <span>Print Shipping Address</span>
+                        <div class="switch">
+                            <label>
+                                @Html.CheckBoxFor(m => m.PrintShipAddress, new { @checked = "checked", @datavalue = "ShipAddress", @class = "PoContent" })
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <span class="display-inline pb-4" id="ShippingAddress"></span>
+                    <div class="display-flex">
+                        <span>Print Billing Address</span>
+                        <div class="switch">
+                            <label>
+                                @Html.CheckBoxFor(m => m.PrintBillAddress, new { @checked = "checked", @datavalue = "BillAddress", @class = "PoContent" })
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <span class="display-inline pb-4" id="BillingAddress"></span>
+                    <div class="display-flex pb-4">
+                        <span>Print Payment Terms</span>
+                        <div class="switch">
+                            <label>
+                                @Html.CheckBoxFor(m => m.PrintPaymentTerms, new { @checked = "checked", @datavalue = "PaymentTerms", @class = "PoContent" })
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="display-flex pb-4">
+                        <span>Print Client Notes</span>
+                        <div class="switch">
+                            <label>
+                                @Html.CheckBoxFor(m => m.PrintClientNote, new { @checked = "checked", @datavalue = "ClientNotes", @class = "PoContent" })
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="display-flex pb-4">
+                        <span>Print Transport</span>
+                        <div class="switch">
+                            <label>
+                                @Html.CheckBoxFor(m => m.PrintTransport, new { @checked = "checked", @datavalue = "Transport", @class = "PoContent" })
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="display-flex pb-4">
+                        <span>Print Terms & Conditions</span>
+                        <div class="switch">
+                            <label>
+                                @Html.CheckBoxFor(m => m.PrintTermsCondition, new { @checked = "checked", @datavalue = "TermsCondition", @class = "PoContent" })
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <label>Terms & Condition Text Content</label>
+                <div class="input-field">
+                    @Html.TextAreaFor(m => m.Terms_Condition, new { @id = "message5", @class = "materialize-textarea", @style = "height:200px;" })
+
+                </div>
+                <label>Signature</label>
+                <div class="input-field">
+                    <input type="file" id="input-file-events" class="dropify-event" name="signature"
+                           data-default-file="@Model.Signature" />
+
+                </div>
+                <div class="input-field">
+
+                    <button class="btn cyan waves-effect waves-light left" type="submit" name="action">
+                        Save
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    var shipping_address = "";
+    shipping_address = localStorage.getItem("Shipping_Address");
+    shipping_address += ", GSTIN:" + localStorage.getItem("GSTIN");
+    shipping_address += ", Tel:" + localStorage.getItem("Mobile_No");
+
+    if (shipping_address != "") {
+        $("#ShippingAddress").html(shipping_address);
+        $("#ShippingAddress").append("<br> <a style='font-style:italic; text-decoration:underline;' href='../Account/CompanyProfile'>Change </a>");
+    }
+
+    var Billing_address = "";
+    Billing_address = localStorage.getItem("Address") + ", " + localStorage.getItem("City") + ", " + localStorage.getItem("State") + "-" + localStorage.getItem("Pin_Code");
+    Billing_address += ", GSTIN:" + localStorage.getItem("GSTIN");
+    Billing_address += ", Tel:" + localStorage.getItem("Mobile_No");
+
+    if (Billing_address != "") {
+        $("#BillingAddress").html(Billing_address);
+        $("#BillingAddress").append("<br> <a style='font-style:italic; text-decoration:underline;' href='../Account/CompanyProfile'>Change </a>");
+    }
+
+</script>

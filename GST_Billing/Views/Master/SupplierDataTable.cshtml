@@ -3,101 +3,102 @@
 <div class="result-count pl-1 white-text">
     <p>About @Model.dt1.Rows[0]["Total_Records"] result found...</p>
 </div>
-<table id="example" class="table invoice-data-table white border-radius-4 pt-1">
-    <thead>
-        <tr>
-            <th class="pl-1">
-                <span>#</span>
-            </th>
-            <th>Company Name</th>
-            <th>Contact Person Name</th>
-            <th>Mobile</th>
-            <th>Email</th>
-            <th>City</th>
-            <th>Opening Balance</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < Model.dt.Rows.Count; i++)
-        {
+<div style="overflow:auto;">
+    <table id="example" class="table invoice-data-table white border-radius-4 pt-1">
+        <thead>
             <tr>
-
-                <td class="pl-1">
-                    @Convert.ToString(Model.dt.Rows[i]["SrNo"])
-                </td>
-                <td><a title="View Details" href="../Master/SupplierDetails?supplierid=@Convert.ToString(Model.dt.Rows[i]["Id"])">  @Convert.ToString(Model.dt.Rows[i]["Company_Name"]) <small> <i class="material-icons cyan-text" style="font-size:14px;">remove_red_eye</i> </small></a> </td>
-                <td>@Convert.ToString(Model.dt.Rows[i]["Contact_Person_Name"])</td>
-                <td>
-                    <small> @Convert.ToString(Model.dt.Rows[i]["Mobile_No"])</small>
-                </td>
-                <td>
-                    <span>@Convert.ToString(Model.dt.Rows[i]["Email"])</span>
-                </td>
-                <td>
-                    @Convert.ToString(Model.dt.Rows[i]["City"])
-                </td>
-                <td>
-                    @if (Convert.ToString(Model.dt.Rows[i]["Opening_Balance"]) != "")
-                    {
-                        if (Convert.ToString(Model.dt.Rows[i]["Opening_Type"]) == "Credit")
-                        {
-                            <span class="green-text">+Rs @Convert.ToString(Model.dt.Rows[i]["Opening_Balance"])</span>
-                        }
-                        else
-                        {
-                            <span class="red-text">-Rs @Convert.ToString(Model.dt.Rows[i]["Opening_Balance"])</span>
-                        }
-                    }
-                </td>
-                <td>
-                    <div class="invoice-action">
-                        <a href="../Master/DeleteSupplier?supplierid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-view mr-4 ">
-                            <i class="material-icons red-text">clear</i>
-                        </a>
-                        <a href="../Master/AddSupplier?supplierid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-edit">
-                            <i class="material-icons cyan-text">edit</i>
-                        </a>
-                    </div>
-                </td>
+                <th class="pl-1">
+                    <span>#</span>
+                </th>
+                <th>Company Name</th>
+                <th>Contact Person Name</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>City</th>
+                <th>Opening Balance</th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
-
-<div id="example_wrapper" class="dataTables_wrapper no-footer">
-    <div class="bottom">
-        <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
-
-            @if (Model.Page_No <= 1)
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.dt.Rows.Count; i++)
             {
-                <a class="paginate_button previous disabled" aria-controls="example" data-dt-idx="0" tabindex="-1" id="example_previous">Previous</a>
+                <tr>
+
+                    <td class="pl-1">
+                        @Convert.ToString(Model.dt.Rows[i]["SrNo"])
+                    </td>
+                    <td><a title="View Details" href="../Master/SupplierDetails?supplierid=@Convert.ToString(Model.dt.Rows[i]["Id"])">  @Convert.ToString(Model.dt.Rows[i]["Company_Name"]) <small> <i class="material-icons cyan-text" style="font-size:14px;">remove_red_eye</i> </small></a> </td>
+                    <td>@Convert.ToString(Model.dt.Rows[i]["Contact_Person_Name"])</td>
+                    <td>
+                        <small> @Convert.ToString(Model.dt.Rows[i]["Mobile_No"])</small>
+                    </td>
+                    <td>
+                        <span>@Convert.ToString(Model.dt.Rows[i]["Email"])</span>
+                    </td>
+                    <td>
+                        @Convert.ToString(Model.dt.Rows[i]["City"])
+                    </td>
+                    <td>
+                        @if (Convert.ToString(Model.dt.Rows[i]["Opening_Balance"]) != "")
+                        {
+                            if (Convert.ToString(Model.dt.Rows[i]["Opening_Type"]) == "Credit")
+                            {
+                                <span class="green-text">+Rs @Convert.ToString(Model.dt.Rows[i]["Opening_Balance"])</span>
+                            }
+                            else
+                            {
+                                <span class="red-text">-Rs @Convert.ToString(Model.dt.Rows[i]["Opening_Balance"])</span>
+                            }
+                        }
+                    </td>
+                    <td>
+                        <div class="invoice-action">
+                            <a href="../Master/DeleteSupplier?supplierid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-view mr-4 ">
+                                <i class="material-icons red-text">clear</i>
+                            </a>
+                            <a href="../Master/AddSupplier?supplierid=@Convert.ToString(Model.dt.Rows[i]["Id"])" class="invoice-action-edit">
+                                <i class="material-icons cyan-text">edit</i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
             }
-            else
-            {
-                <a class="paginate_button previous" id="filter-Supplier" aria-controls="example" data-value="@(Model.Page_No-1)" data-dt-idx="0" tabindex="-1">Previous</a>
-            }
+        </tbody>
+    </table>
+    </div>
+    <div id="example_wrapper" class="dataTables_wrapper no-footer">
+        <div class="bottom">
+            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
 
-            @for (int i = 0; i < Convert.ToInt32(Model.dt1.Rows[0]["Total_Page"]); i++)
-            {
-                if (Model.Page_No == (i + 1))
+                @if (Model.Page_No <= 1)
                 {
-                    <span><a class="paginate_button current" aria-controls="example" data-dt-idx="1" data-value="@(i+1)" tabindex="@(i+1)">@(i + 1)</a></span>
+                    <a class="paginate_button previous disabled" aria-controls="example" data-dt-idx="0" tabindex="-1" id="example_previous">Previous</a>
                 }
                 else
                 {
-                    <span><a class="paginate_button" id="filter-Supplier" aria-controls="example" data-dt-idx="1" data-value="@(i+1)" tabindex="@(i+1)">@(i + 1)</a></span>
+                    <a class="paginate_button previous" id="filter-Supplier" aria-controls="example" data-value="@(Model.Page_No-1)" data-dt-idx="0" tabindex="-1">Previous</a>
                 }
-            }
 
-            @if (Model.Page_No >= Convert.ToInt32(Model.dt1.Rows[0]["Total_Page"]))
-            {
-                <a class="paginate_button next disabled" aria-controls="example" data-dt-idx="2" tabindex="-1" id="example_next">Next</a>
-            }
-            else
-            {
-                <a class="paginate_button next" aria-controls="example" data-dt-idx="2" tabindex="-1" data-value="@(Model.Page_No+1)" id="filter-Supplier">Next</a>
-            }
+                @for (int i = 0; i < Convert.ToInt32(Model.dt1.Rows[0]["Total_Page"]); i++)
+                {
+                    if (Model.Page_No == (i + 1))
+                    {
+                        <span><a class="paginate_button current" aria-controls="example" data-dt-idx="1" data-value="@(i+1)" tabindex="@(i+1)">@(i + 1)</a></span>
+                    }
+                    else
+                    {
+                        <span><a class="paginate_button" id="filter-Supplier" aria-controls="example" data-dt-idx="1" data-value="@(i+1)" tabindex="@(i+1)">@(i + 1)</a></span>
+                    }
+                }
+
+                @if (Model.Page_No >= Convert.ToInt32(Model.dt1.Rows[0]["Total_Page"]))
+                {
+                    <a class="paginate_button next disabled" aria-controls="example" data-dt-idx="2" tabindex="-1" id="example_next">Next</a>
+                }
+                else
+                {
+                    <a class="paginate_button next" aria-controls="example" data-dt-idx="2" tabindex="-1" data-value="@(Model.Page_No+1)" id="filter-Supplier">Next</a>
+                }
+            </div>
         </div>
     </div>
-</div>

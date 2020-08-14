@@ -1,0 +1,70 @@
+﻿@model GST_Billing.Models.PurchaseOrderProductManagement
+
+@if (Request.QueryString["Purchaseid"] != null)
+{
+    if (Model.dt.Rows.Count > 0)
+    {
+        for (int i = 0; i < Model.dt.Rows.Count; i++)
+        {
+            <tr>
+                <td>
+                    @Model.dt.Rows[i]["Item_Name"]
+                    @Html.HiddenFor(m => m.Item_Id, new { @Value = @Model.dt.Rows[i]["Item_Id"] })
+                    @Html.HiddenFor(m => m.Item_Name, new { @Value = @Model.dt.Rows[i]["Item_Name"] })
+                    @Html.HiddenFor(m => m.PurchaseOrder_Product_Id, new { @Value = @Model.dt.Rows[i]["Id"] })
+                    @Html.HiddenFor(m => m.Purchase_Order_Id, new { @Value = @Model.dt.Rows[i]["Purchase_Order_Id"] })
+                </td>
+                <td>
+                    @Model.dt.Rows[i]["Unit_Name"]
+                    @Html.HiddenFor(m => m.Unit_Name, new { @Value = @Model.dt.Rows[i]["Unit_Name"] })
+                    @Html.HiddenFor(m => m.UOM_Unit, new { @Value = @Model.dt.Rows[i]["UOM_Unit"] })
+                    @Html.HiddenFor(m => m.HSN_SAC, new { @Value = @Model.dt.Rows[i]["HSN_SAC"] })
+                    @Html.HiddenFor(m => m.Batch_No, new { @Value = @Model.dt.Rows[i]["Batch_No"] })
+                    @Html.HiddenFor(m => m.Item_Note, new { @Value = @Model.dt.Rows[i]["Note"] })
+                </td>
+                <td>
+                    @Model.dt.Rows[i]["Quantity"]
+                    @Html.HiddenFor(m => m.Quantity, new { @Value = @Model.dt.Rows[i]["Quantity"] })
+                </td>
+                <td>
+                    @Model.dt.Rows[i]["Rate"]
+                    @Html.HiddenFor(m => m.Rate, new { @Value = @Model.dt.Rows[i]["Rate"] })
+                </td>
+                <td>
+                    @Model.dt.Rows[i]["Discount_Percentage"]%
+                    @Html.HiddenFor(m => m.Discount_Percentage, new { @Value = @Model.dt.Rows[i]["Discount_Percentage"] })
+                </td>
+                <td>
+                    @Model.dt.Rows[i]["CGST"]%
+                    @Html.HiddenFor(m => m.CGST, new { @Value = @Model.dt.Rows[i]["CGST"] })
+                </td>
+                <td>
+                    @Model.dt.Rows[i]["SGST"]%
+                    @Html.HiddenFor(m => m.SGST, new { @Value = @Model.dt.Rows[i]["SGST"] })
+                    @if (Convert.ToString(Model.dt.Rows[i]["Tax"]) != "")
+                    {
+                        @Html.HiddenFor(m => m.Tax, new { @Value =Convert.ToDouble(Model.dt.Rows[i]["Tax"]) })
+
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(m => m.Tax)
+                    }
+                </td>
+                <td>
+                    <strong class="black-text"> @Model.dt.Rows[i]["Total"]</strong>
+                    @Html.HiddenFor(m => m.Total, new { @Value = @Model.dt.Rows[i]["Total"] })
+                </td>
+                <td class="p-0">
+                    <input type="hidden" name="action_type" value="Edit" />
+                    <span data-repeater-delete class="delete-row-btn cyan-text" id="edit-row">
+                        <i class="material-icons">edit</i>
+                    </span>
+                    <span type="button" data-repeater-delete class="delete-row-btn red-text" id="delete-row">
+                        <i class="material-icons">clear</i>
+                    </span>
+                </td>
+            </tr>
+        }
+    }
+}

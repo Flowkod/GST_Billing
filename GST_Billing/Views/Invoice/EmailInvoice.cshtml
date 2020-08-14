@@ -1,0 +1,65 @@
+﻿@model GST_Billing.Models.ComposeEmail
+
+<div class="card-content scrollspy">
+    <h5 class="card-title mt-0">Compose Email</h5>
+    <div class="row">
+        <div class="input-field col m6 s12 mb-1">
+            @Html.TextBoxFor(m => m.From)
+            <label class="active">From*</label>
+            <div class="error">
+                @Html.ValidationMessageFor(m => m.From, "")
+            </div>
+        </div>
+        <div class="input-field col m6 s12 m-1">
+            @Html.TextBoxFor(m => m.ReplyTo)
+            <label class="active">Reply To*</label>
+            <div class="error">
+                @Html.ValidationMessageFor(m => m.ReplyTo, "")
+            </div>
+        </div>
+        <div class="input-field col m6 s12 m-1">
+            @Html.TextBoxFor(m => m.SendTo)
+            <label class="active">Send To*</label>
+            <div class="error">
+                @Html.ValidationMessageFor(m => m.SendTo, "")
+            </div>
+        </div>
+        
+        <div class="input-field col m6 s12 m-1">
+            @Html.TextBoxFor(m => m.Cc)
+            <label class="active">Cc</label>
+
+        </div>
+        <div class="input-field col m12 s12 m-1">
+            @Html.TextBoxFor(m => m.Subject)
+            <label class="active">Subject*</label>
+            <div class="error">
+                @Html.ValidationMessageFor(m => m.Subject, "")
+            </div>
+        </div>
+        <div class="input-field col m12 s12 m-1">
+            @Html.TextAreaFor(m => m.Body,new { @id = "message5", @class = "materialize-textarea", @style = "height: 150px;" })
+            <label class="active">Body*</label>
+            <div class="error">
+                @Html.ValidationMessageFor(m => m.Body, "")
+            </div>
+        </div>
+        <div class="input-field col m12 s12 m-0">
+            <p class="mb-1">
+                <label>
+                    <input type="checkbox">
+                    <span>Attach Invoice</span>
+                </label>
+            </p>
+
+        </div>
+        <div class="input-field col m12 s12 m-0 right-align">
+            <button class="modal-action modal-close btn waves-effect waves-light red accent-2" type="button" name="action">
+                Cancel
+            </button>
+            <button class="modal-action btn waves-light green darken-1" type="button" name="action">
+                Send
+            </button>
+        </div>
+    </div>
+</div>
